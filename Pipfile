@@ -11,8 +11,9 @@ flake8 = "*"
 [packages]
 django = "*"
 djangorestframework = "*"
-psycopg2 = "*"
 gunicorn = "*"
+psycopg2-binary = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
