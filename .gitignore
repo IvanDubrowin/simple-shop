@@ -130,3 +130,6 @@ dmypy.json
 
 #Pycharm
 .idea/
+
+/server/apps/api/migrations/
+/server/apps/core/migrations/
