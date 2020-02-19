@@ -133,3 +133,5 @@ dmypy.json
 
 /server/apps/api/migrations/
 /server/apps/core/migrations/
+/server/apps/site_admin/migrations/
+/server/media/
