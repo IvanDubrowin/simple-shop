@@ -17,6 +17,7 @@ psycopg2 = "*"
 django-configurations = "*"
 django-cleanup = "*"
 pillow = "*"
+django-phonenumber-field = {extras = ["phonenumbers"],version = "==4.0.0"}
 
 [requires]
 python_version = "3.7"

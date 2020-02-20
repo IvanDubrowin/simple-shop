@@ -15,6 +15,7 @@ class Base(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'django_cleanup.apps.CleanupConfig',
+        'phonenumber_field',
         'core',
         'site_admin',
         'api',
