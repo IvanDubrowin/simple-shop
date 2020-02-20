@@ -29,6 +29,8 @@ class UiConfig(models.Model):
         return self.title
 
     def save(self, *args, **kwargs) -> None:
+        if self.is_current is True:
+            UiConfig.objects.exclude(pk__in=[self.pk]).update(is_current=None)
         if self.is_current is False:
             self.is_current = None
         super().save(*args, **kwargs)
