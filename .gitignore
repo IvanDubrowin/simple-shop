@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#Pycharm
+.idea/
+
+/server/apps/api/migrations/
+/server/apps/core/migrations/
+/server/apps/site_admin/migrations/
+/server/media/
