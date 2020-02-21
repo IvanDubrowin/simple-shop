@@ -22,7 +22,7 @@ class UiConfigViewSet(GenericViewSet):
         serializer = self.get_serializer(config)
         return Response(serializer.data)
 
-    def get_current_config(self):
+    def get_current_config(self) -> UiConfig:
         queryset = self.filter_queryset(self.get_queryset())
         config = queryset.first()
         if not config:

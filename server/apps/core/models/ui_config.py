@@ -1,6 +1,6 @@
 from typing import Optional
 
-from django.db import models
+from django.db import models, transaction
 
 from core.models.carousel import Carousel
 from core.models.contact_info import ContactInfo
@@ -28,9 +28,10 @@ class UiConfig(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    @transaction.atomic
     def save(self, *args, **kwargs) -> None:
         if self.is_current is True:
-            UiConfig.objects.exclude(pk__in=[self.pk]).update(is_current=None)
+            UiConfig.objects.exclude(pk=self.pk).update(is_current=None)
         if self.is_current is False:
             self.is_current = None
         super().save(*args, **kwargs)
