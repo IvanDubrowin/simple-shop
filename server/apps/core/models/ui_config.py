@@ -21,9 +21,15 @@ class UiConfig(models.Model):
     contact_info: ContactInfo = models.ForeignKey(
         ContactInfo,
         on_delete=models.CASCADE,
+        related_name='configs',
         verbose_name='Контактная информация сайта'
     )
-    content: Content = models.ForeignKey(Content, on_delete=models.CASCADE, verbose_name='Контент')
+    content: Content = models.ForeignKey(
+        Content,
+        on_delete=models.CASCADE,
+        related_name='configs',
+        verbose_name='Контент'
+    )
 
     def __str__(self) -> str:
         return self.title
