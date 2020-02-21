@@ -7,6 +7,7 @@ verify_ssl = true
 mypy = "*"
 isort = "*"
 flake8 = "*"
+coverage = "*"
 
 [packages]
 django = "*"
@@ -18,7 +19,6 @@ django-configurations = "*"
 django-cleanup = "*"
 pillow = "*"
 django-phonenumber-field = {extras = ["phonenumbers"],version = "==4.0.0"}
-coverage = "*"
 
 [requires]
 python_version = "3.7"
