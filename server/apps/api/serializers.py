@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
-from core.models import (Carousel, Category, ContactInfo, Content, Product,
-                         UiConfig)
+from core.models import (Carousel, CartItem, Category, ContactInfo, Content,
+                         Product, UiConfig)
 
 
 class CarouselSerializer(ModelSerializer):
@@ -42,3 +42,9 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class CartItemSerializer(ModelSerializer):
+    class Meta:
+        model = CartItem
+        exclude = ('cart',)
