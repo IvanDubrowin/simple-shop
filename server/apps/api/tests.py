@@ -5,7 +5,8 @@ from PIL import Image
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from core.models import Carousel, ContactInfo, Content, UiConfig
+from core.models import (Carousel, Category, ContactInfo, Content, Product,
+                         UiConfig)
 
 
 class UiConfigTestCase(APITestCase):
@@ -68,3 +69,41 @@ class UiConfigTestCase(APITestCase):
             contact_info=contact_info
         )
         return config
+
+
+class CategoryTestCase(APITestCase):
+    def setUp(self) -> None:
+        self.category = Category.objects.create(title='test')
+
+    def test_get_categories(self) -> None:
+        response = self.client.get('/api/categories/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_category(self) -> None:
+        response = self.client.get('/api/categories/{id}/'.format(id=self.category.pk))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class ProductTestCase(APITestCase):
+    def setUp(self) -> None:
+        self.category = Category.objects.create(title='test')
+        self.product = Product.objects.create(
+            title='test',
+            price=300.00,
+            category=self.category
+        )
+
+    def test_get_products(self) -> None:
+        response = self.client.get(
+            '/api/categories/{id}/products/'.format(id=self.category.pk)
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_product(self) -> None:
+        response = self.client.get(
+            '/api/categories/{category_id}/products/{product_id}/'.format(
+                category_id=self.category.pk,
+                product_id=self.product.pk
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
