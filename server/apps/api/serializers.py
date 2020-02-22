@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
-from core.models import Carousel, ContactInfo, Content, UiConfig
+from core.models import (Carousel, Category, ContactInfo, Content, Product,
+                         UiConfig)
 
 
 class CarouselSerializer(ModelSerializer):
@@ -28,4 +29,16 @@ class UiConfigSerializer(ModelSerializer):
 
     class Meta:
         model = UiConfig
+        fields = '__all__'
+
+
+class CategorySerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class ProductSerializer(ModelSerializer):
+    class Meta:
+        model = Product
         fields = '__all__'
