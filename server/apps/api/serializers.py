@@ -1,7 +1,12 @@
-from rest_framework.serializers import ModelSerializer
+import os
 
-from core.models import (Carousel, Category, ContactInfo, Content, Product,
-                         UiConfig)
+from django.conf import settings
+from rest_framework.serializers import (HiddenField, ModelSerializer,
+                                        SerializerMethodField)
+from rest_framework.validators import UniqueTogetherValidator
+
+from core.models import (Carousel, Cart, CartItem, Category, ContactInfo,
+                         Content, Product, UiConfig)
 
 
 class CarouselSerializer(ModelSerializer):
@@ -42,3 +47,57 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class CurrentCart:
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        return self.get_cart(serializer_field.context['request'])
+
+    def __repr__(self):
+        return '%s()' % self.__class__.__name__
+
+    @staticmethod
+    def get_cart(request) -> Cart:
+        if not request.session.session_key:
+            request.session.save()
+        session_id = request.session.session_key
+        cart, _ = Cart.objects.get_or_create(session_id=session_id)
+        return cart
+
+
+class CartItemEditSerializer(ModelSerializer):
+    cart = HiddenField(default=CurrentCart())
+
+    class Meta:
+        model = CartItem
+        fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=model.objects.all(),
+                fields=('cart', 'product')
+            )
+        ]
+
+
+class CartItemDetailSerializer(ModelSerializer):
+    title = SerializerMethodField()
+    price = SerializerMethodField()
+    image = SerializerMethodField()
+
+    @staticmethod
+    def get_title(cart_item: CartItem) -> str:
+        return cart_item.title
+
+    @staticmethod
+    def get_price(cart_item: CartItem) -> str:
+        return cart_item.price
+
+    @staticmethod
+    def get_image(cart_item: CartItem) -> str:
+        return os.path.join(settings.MEDIA_URL, cart_item.image)
+
+    class Meta:
+        model = CartItem
+        exclude = ('cart',)

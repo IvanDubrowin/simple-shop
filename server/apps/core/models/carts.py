@@ -32,7 +32,7 @@ class CartItem(models.Model):
     cart: Cart = models.ForeignKey(
         Cart,
         on_delete=models.CASCADE,
-        related_name='cart_items',
+        related_name='products',
         verbose_name='Корзина'
     )
     product: Product = models.ForeignKey(
@@ -51,6 +51,12 @@ class CartItem(models.Model):
         db_table = 'cart_items'
         verbose_name = 'Элемент Корзины'
         verbose_name_plural = 'Элементы корзины'
+        constraints = [
+            models.UniqueConstraint(
+                fields=('cart', 'product'),
+                name='unique_cart_product'
+            )
+        ]
 
     def __str__(self) -> str:
         return f'{self.product.title} в корзине {self.cart.pk}'
