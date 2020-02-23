@@ -107,3 +107,46 @@ class ProductTestCase(APITestCase):
             )
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CartTestCase(APITestCase):
+    def setUp(self) -> None:
+        self.category = Category.objects.create(title='test')
+        self.product = Product.objects.create(
+            title='test',
+            price=300.00,
+            category=self.category
+        )
+
+    def test_get_cart_items(self) -> None:
+        response = self.client.get('/api/cart/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_add_product(self) -> None:
+        response = self.client.post(
+            '/api/cart/',
+            data={'count': 10, 'product': self.product.pk}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_change_cart_item(self) -> None:
+        response = self.client.post(
+            '/api/cart/',
+            data={'count': 10, 'product': self.product.pk}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        cart_item_pk = response.data['id']
+
+        response = self.client.patch(
+            '/api/cart/{id}/'.format(id=cart_item_pk),
+            data={'count': 20}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_clear_cart(self) -> None:
+        response = self.client.post('/api/cart/clear/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get('/api/cart/')
+        self.assertEqual(response.data, [])

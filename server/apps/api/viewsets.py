@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.db.models.query import QuerySet
 from django.http import Http404
 from rest_framework.decorators import action
@@ -8,8 +9,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from api.filters import CurrentUiConfigFilter
-from api.serializers import (CartItemSerializer, CategorySerializer,
-                             ProductSerializer, UiConfigSerializer)
+from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
+                             CategorySerializer, ProductSerializer,
+                             UiConfigSerializer)
 from core.models import Cart, CartItem, Category, Product, UiConfig
 
 
@@ -61,22 +63,39 @@ class CartItemViewSet(ModelViewSet):
     Api товаров в корзине пользователя
     """
     queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
+    serializer_class = CartItemEditSerializer
+
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        self.annotate_queryset()
+        self.serializer_class = CartItemDetailSerializer
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+        self.annotate_queryset()
+        self.serializer_class = CartItemDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
+
+    def annotate_queryset(self) -> None:
+        self.queryset = self.queryset.annotate(
+            title=F('product__title'),
+            price=F('product__price'),
+            image=F('product__image')
+        )
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
-        cart = self.get_user_cart()
+        cart = self.get_cart()
         return queryset.filter(cart=cart)
 
-    def perform_create(self, serializer: CartItemSerializer) -> None:
-        serializer.save(cart=self.get_user_cart())
-
-    def perform_update(self, serializer: CartItemSerializer) -> None:
-        serializer.save(cart=self.get_user_cart())
-
-    def get_user_cart(self) -> Cart:
+    def get_cart(self) -> Cart:
         if not self.request.session.session_key:
             self.request.session.save()
         session_id = self.request.session.session_key
         cart, _ = Cart.objects.get_or_create(session_id=session_id)
         return cart
+
+    @action(methods=['POST'], detail=False)
+    def clear(self, request: Request) -> Response:
+        cart = self.get_cart()
+        cart.products.all().delete()
+        return Response({'success': 'Корзина очищена'})
