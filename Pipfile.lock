@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6b894f9334f419b3766057939e53379113b203824ef028856a592288e052ab33"
+            "sha256": "b0b3e0c36a4aec25421ae62b16e748d4bce82ffde59962968f433f0f6e4d8401"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -38,6 +38,14 @@
             "index": "pypi",
             "version": "==3.0.3"
         },
+        "django-admin-interface": {
+            "hashes": [
+                "sha256:7e7d703554a937ac3f700a4ac2733e4100405433bc6899467f3fc6c24bd60221",
+                "sha256:8540b802d6cd60e4e94662256b6951e484c5432f776eaa8ebc7a135cf37b2924"
+            ],
+            "index": "pypi",
+            "version": "==0.12.1"
+        },
         "django-cleanup": {
             "hashes": [
                 "sha256:412c3f9417ddaaaa561b60237b109550b16e556db92d4616278fc7e1ad9ab0a4",
@@ -46,6 +54,13 @@
             "index": "pypi",
             "version": "==4.0.0"
         },
+        "django-colorfield": {
+            "hashes": [
+                "sha256:2a20722384a1703ff9b91a395de6e2649a8786161f8baff4d21998ba839f9017",
+                "sha256:c22c9cdae8608432adcde09d6e9e05dd4c498207e1cda0ab8fba0ab3ceb85dcd"
+            ],
+            "version": "==0.2.1"
+        },
         "django-configurations": {
             "hashes": [
                 "sha256:0b93cb7042739e2d69cfc6fb81676bbd3cbb63ea19b02e8b681f4cad3a8aaf1b",
@@ -53,6 +68,18 @@
             ],
             "index": "pypi",
             "version": "==2.2"
+        },
+        "django-flat-responsive": {
+            "hashes": [
+                "sha256:451caa2700c541b52fb7ce2d34d3d8dee9e980cf29f5463bc8a8c6256a1a6474"
+            ],
+            "version": "==2.0"
+        },
+        "django-flat-theme": {
+            "hashes": [
+                "sha256:6b522d8c2b5a8228b30947fb002eff2868da076e9beacf3e798410e5c1a2d849"
+            ],
+            "version": "==1.1.4"
         },
         "django-phonenumber-field": {
             "extras": [

@@ -42,6 +42,10 @@ class UiConfig(models.Model):
             self.is_current = None
         super().save(*args, **kwargs)
 
+    def validate_unique(self, exclude=None):
+        exclude = ('is_current',)
+        super().validate_unique(exclude=exclude)
+
     class Meta:
         db_table = 'ui_config'
         verbose_name = 'Конфигурация интерфейса'

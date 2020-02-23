@@ -17,11 +17,6 @@ class Cart(models.Model):
         verbose_name='Сессия пользователя'
     )
 
-    class Meta:
-        db_table = 'carts'
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
-
     def __str__(self) -> str:
         return f'Корзина {self.pk}'
 
@@ -32,6 +27,11 @@ class Cart(models.Model):
         session_id = request.session.session_key
         cart, _ = cls.objects.get_or_create(session_id=session_id)
         return cart
+
+    class Meta:
+        db_table = 'carts'
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
 
 
 class CartItem(models.Model):
@@ -56,6 +56,9 @@ class CartItem(models.Model):
         verbose_name='Количество товара'
     )
 
+    def __str__(self) -> str:
+        return f'{self.product.title} в корзине {self.cart.pk}'
+
     class Meta:
         db_table = 'cart_items'
         verbose_name = 'Элемент Корзины'
@@ -66,6 +69,3 @@ class CartItem(models.Model):
                 name='unique_cart_product'
             )
         ]
-
-    def __str__(self) -> str:
-        return f'{self.product.title} в корзине {self.cart.pk}'
