@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 
 from core.utils import hash_upload
 
@@ -35,7 +36,7 @@ class Product(models.Model):
     )
     price: float = models.FloatField(verbose_name='Цена')
     description: str = models.TextField(blank=True, verbose_name='Описание товара')
-    image: str = models.ImageField(upload_to=hash_upload, verbose_name='Изображение', null=True)
+    image: ImageFieldFile = models.ImageField(upload_to=hash_upload, verbose_name='Изображение', null=True)
 
     class Meta:
         db_table = 'products'

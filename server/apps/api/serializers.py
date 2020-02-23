@@ -53,18 +53,10 @@ class CurrentCart:
     requires_context = True
 
     def __call__(self, serializer_field):
-        return self.get_cart(serializer_field.context['request'])
+        return Cart.get_current_cart(serializer_field.context['request'])
 
     def __repr__(self):
         return '%s()' % self.__class__.__name__
-
-    @staticmethod
-    def get_cart(request) -> Cart:
-        if not request.session.session_key:
-            request.session.save()
-        session_id = request.session.session_key
-        cart, _ = Cart.objects.get_or_create(session_id=session_id)
-        return cart
 
 
 class CartItemEditSerializer(ModelSerializer):
