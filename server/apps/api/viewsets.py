@@ -84,18 +84,11 @@ class CartItemViewSet(ModelViewSet):
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
-        cart = self.get_cart()
+        cart = Cart.get_current_cart(self.request)
         return queryset.filter(cart=cart)
-
-    def get_cart(self) -> Cart:
-        if not self.request.session.session_key:
-            self.request.session.save()
-        session_id = self.request.session.session_key
-        cart, _ = Cart.objects.get_or_create(session_id=session_id)
-        return cart
 
     @action(methods=['POST'], detail=False)
     def clear(self, request: Request) -> Response:
-        cart = self.get_cart()
+        cart = Cart.get_current_cart(request)
         cart.products.all().delete()
         return Response({'success': 'Корзина очищена'})

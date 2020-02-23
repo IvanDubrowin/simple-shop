@@ -1,6 +1,7 @@
 from django.contrib.sessions.models import Session
 from django.core.validators import MinValueValidator
 from django.db import models
+from rest_framework.request import Request
 
 from core.models.products import Product
 
@@ -23,6 +24,14 @@ class Cart(models.Model):
 
     def __str__(self) -> str:
         return f'Корзина {self.pk}'
+
+    @classmethod
+    def get_current_cart(cls, request: Request) -> 'Cart':
+        if not request.session.session_key:
+            request.session.save()
+        session_id = request.session.session_key
+        cart, _ = cls.objects.get_or_create(session_id=session_id)
+        return cart
 
 
 class CartItem(models.Model):

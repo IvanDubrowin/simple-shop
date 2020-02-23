@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 
 from core.utils import hash_upload
 
@@ -9,7 +10,7 @@ class Content(models.Model):
     """
     title: str = models.CharField(max_length=255, verbose_name='Название')
     text: str = models.TextField(verbose_name='Текст')
-    image: str = models.ImageField(upload_to=hash_upload, verbose_name='Изображение')
+    image: ImageFieldFile = models.ImageField(upload_to=hash_upload, verbose_name='Изображение')
 
     def __str__(self) -> str:
         return self.title
