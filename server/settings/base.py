@@ -15,6 +15,7 @@ class Base(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'django_cleanup.apps.CleanupConfig',
+        'templated_email',
         'rest_framework',
         'phonenumber_field',
         'core',
@@ -86,6 +87,10 @@ class Base(Configuration):
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
+
+    TEMPLATED_EMAIL_FILE_EXTENSION = 'html'
 
     @classmethod
     def post_setup(cls) -> None:

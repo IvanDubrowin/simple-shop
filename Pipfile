@@ -20,6 +20,7 @@ django-cleanup = "*"
 pillow = "*"
 django-phonenumber-field = {extras = ["phonenumbers"],version = "==4.0.0"}
 drf-nested-routers = "*"
+django-templated-email = "*"
 
 [requires]
 python_version = "3.7"
