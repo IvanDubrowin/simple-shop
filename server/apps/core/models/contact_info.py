@@ -1,5 +1,9 @@
+from textwrap import shorten
+
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+
+from core.utils import admin_display
 
 
 class ContactInfo(models.Model):
@@ -15,6 +19,11 @@ class ContactInfo(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    @property  # type: ignore
+    @admin_display(short_description='Доп. информация')
+    def shorten_description(self) -> str:
+        return shorten(self.description, width=100, placeholder='...')
 
     class Meta:
         db_table = 'contact_info'

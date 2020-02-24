@@ -5,6 +5,7 @@ from django.db import models, transaction
 from core.models.carousel import Carousel
 from core.models.contact_info import ContactInfo
 from core.models.content import Content
+from core.utils import admin_display
 
 
 class UiConfig(models.Model):
@@ -12,7 +13,7 @@ class UiConfig(models.Model):
     Конфигурация интерфейса сайта
     """
     title: str = models.CharField(max_length=255, verbose_name='Название')
-    is_current: Optional[bool] = models.NullBooleanField(
+    is_active: Optional[bool] = models.NullBooleanField(
         default=None,
         unique=True,
         verbose_name='Активная конфигурация'
@@ -36,11 +37,21 @@ class UiConfig(models.Model):
 
     @transaction.atomic
     def save(self, *args, **kwargs) -> None:
-        if self.is_current is True:
-            UiConfig.objects.exclude(pk=self.pk).update(is_current=None)
-        if self.is_current is False:
-            self.is_current = None
+        if self.is_active is True:
+            UiConfig.objects.exclude(pk=self.pk).update(is_active=None)
+        if self.is_active is False:
+            self.is_active = None
         super().save(*args, **kwargs)
+
+    def validate_unique(self, exclude=None) -> None:
+        exclude = ('is_active',)
+        super().validate_unique(exclude=exclude)
+
+    @admin_display(short_description='Активная конфигурация', boolean=True)
+    def get_is_active(self) -> bool:
+        if self.is_active is True:
+            return True
+        return False
 
     class Meta:
         db_table = 'ui_config'

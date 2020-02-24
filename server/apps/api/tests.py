@@ -12,12 +12,12 @@ from core.models import (Carousel, Category, ContactInfo, Content, Product,
 class UiConfigTestCase(APITestCase):
     def test_api_current_config(self) -> None:
         config = self.create_ui_config()
-        response = self.client.get('/api/configs/current/')
+        response = self.client.get('/api/configs/active/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        config.is_current = True
+        config.is_active = True
         config.save()
 
-        response = self.client.get('/api/configs/current/')
+        response = self.client.get('/api/configs/active/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('content', response.data)
         self.assertIn('carousel', response.data)
@@ -25,18 +25,18 @@ class UiConfigTestCase(APITestCase):
 
     def test_model_save_method(self) -> None:
         config = self.create_ui_config()
-        config.is_current = True
+        config.is_active = True
         config.save()
-        self.assertEqual(config.is_current, True)
+        self.assertEqual(config.is_active, True)
 
         new_config = self.create_ui_config()
-        new_config.is_current = True
+        new_config.is_active = True
         new_config.save()
 
         config = UiConfig.objects.get(pk=config.pk)
 
-        self.assertEqual(config.is_current, None)
-        self.assertEqual(new_config.is_current, True)
+        self.assertEqual(config.is_active, None)
+        self.assertEqual(new_config.is_active, True)
 
     @staticmethod
     def get_image_file() -> File:
