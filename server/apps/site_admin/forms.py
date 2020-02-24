@@ -10,7 +10,7 @@ class UiConfigAdminForm(ModelForm):
             (True, 'Да'),
             (False, 'Нет')
         )
-        self.fields['is_current'].widget.choices = choices
+        self.fields['is_active'].widget.choices = choices
 
     class Meta:
         model = UiConfig

@@ -41,21 +41,10 @@ class ContentAdmin(admin.ModelAdmin):
 
 @admin.register(UiConfig)
 class UiConfigAdmin(admin.ModelAdmin):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.is_current_.boolean = True
-        self.is_current_.short_description = 'Активная конфигурация'
-
-    list_display = ('title', 'is_current_', 'carousel', 'content')
+    list_display = ('title', 'get_is_active', 'carousel', 'content')
     search_fields = ('title',)
     list_per_page = 25
     form = UiConfigAdminForm
-
-    @staticmethod
-    def is_current_(config: UiConfig) -> bool:
-        if config.is_current is None:
-            return False
-        return config.is_current
 
 
 @admin.register(Cart)

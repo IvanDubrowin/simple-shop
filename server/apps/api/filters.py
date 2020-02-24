@@ -4,11 +4,11 @@ from rest_framework.request import Request
 from rest_framework.viewsets import GenericViewSet
 
 
-class CurrentUiConfigFilter(BaseFilterBackend):
+class ActiveUiConfigFilter(BaseFilterBackend):
     def filter_queryset(
             self,
             request: Request,
             queryset: QuerySet,
             view: GenericViewSet
     ) -> QuerySet:
-        return queryset.filter(is_current=True)
+        return queryset.filter(is_active=True)
