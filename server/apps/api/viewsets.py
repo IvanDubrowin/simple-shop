@@ -8,12 +8,13 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from templated_email import send_templated_mail
 
+from api.permissions import ActiveUiConfigIsReady
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
                              CategorySerializer, ProductSerializer,
                              UiConfigSerializer)
 from shop.models import Cart, CartItem, Category, Product
-from templated_email import send_templated_mail
 from ui.models import UiConfig
 
 
@@ -90,7 +91,7 @@ class CartItemViewSet(ModelViewSet):
         cart.products.all().delete()
         return Response({'success': 'Корзина очищена'})
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, permission_classes=(ActiveUiConfigIsReady,))
     def create_order(self, request: Request) -> Response:
         self.notify_seller(context={})
         return Response({'success': 'Заказ отправлен'})
@@ -106,5 +107,5 @@ class CartItemViewSet(ModelViewSet):
             template_name='order',
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[config.contact_info.email],
-            context=context
+            context=context,
         )
