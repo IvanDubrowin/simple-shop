@@ -1,8 +1,10 @@
 from django.contrib import admin
 
 from shop.models import Cart, CartItem, Category, Order, OrderItem, Product
-from site_admin.forms import UiConfigAdminForm
+from site_admin.forms import UiConfigAdminForm, CaptchaAdminAuthenticationForm
 from ui.models import Carousel, ContactInfo, Content, UiConfig
+
+admin.AdminSite.login_form = CaptchaAdminAuthenticationForm
 
 
 @admin.register(Carousel)
