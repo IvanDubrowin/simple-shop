@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from core.models import UiConfig
+from ui.models import UiConfig
 
 
 class UiConfigAdminForm(ModelForm):

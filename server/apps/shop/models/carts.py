@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from rest_framework.request import Request
 
-from core.models.products import Product
+from shop.models.products import Product
 
 
 class Cart(models.Model):

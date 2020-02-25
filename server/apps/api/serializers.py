@@ -5,8 +5,8 @@ from rest_framework.serializers import (HiddenField, ModelSerializer,
                                         SerializerMethodField)
 from rest_framework.validators import UniqueTogetherValidator
 
-from core.models import (Carousel, Cart, CartItem, Category, ContactInfo,
-                         Content, Product, UiConfig)
+from shop.models import Cart, CartItem, Category, Product
+from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 
 class CarouselSerializer(ModelSerializer):

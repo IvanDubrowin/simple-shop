@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from core.models import (Carousel, Cart, CartItem, Category, ContactInfo,
-                         Content, Product, UiConfig)
+from shop.models import Cart, CartItem, Category, Product
 from site_admin.forms import UiConfigAdminForm
+from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 
 @admin.register(Carousel)

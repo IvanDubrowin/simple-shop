@@ -18,6 +18,8 @@ class Base(Configuration):
         'rest_framework',
         'phonenumber_field',
         'core',
+        'ui',
+        'shop',
         'site_admin',
         'api',
     ]

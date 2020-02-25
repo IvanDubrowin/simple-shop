@@ -2,10 +2,10 @@ from typing import Optional
 
 from django.db import models, transaction
 
-from core.models.carousel import Carousel
-from core.models.contact_info import ContactInfo
-from core.models.content import Content
 from core.utils import admin_display
+from ui.models.carousel import Carousel
+from ui.models.contact_info import ContactInfo
+from ui.models.content import Content
 
 
 class UiConfig(models.Model):
