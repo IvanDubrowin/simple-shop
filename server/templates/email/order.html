@@ -1,3 +1,23 @@
+{% block subject %}Заказ {{ order.pk }}{% endblock %}
 {% block html %}
-  <p>Hello</p>
+  <table>
+    <tr>
+        <th>Название товара</th>
+        <th>Цена</th>
+        <th>Количество</th>
+        <th>Общая сумма</th>
+    </tr>
+      {% for product in products %}
+    <tr>
+        <td>{{ product.title }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.count }}</td>
+        <td>{{ product.total_price }}</td>
+     </tr>
+      {% endfor %}
+  </table>
+  <h2>Общая сумма к оплате: {{ total }}</h2>
+  <h3>Ваши контактные данные:</h3>
+  <p>Email: {{ order.email }}</p>
+  <p>Телефон: {{ order.phone_number }}</p>
 {% endblock %}

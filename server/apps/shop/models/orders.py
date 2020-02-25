@@ -29,25 +29,28 @@ class Order(models.Model):
 
     @staticmethod
     def order_items_fabric(order: 'Order', cart: Cart) -> None:
-        for cart_item in cart.products.annotate(
+        cart_items = cart.products.annotate(
                 title=models.F('product__title'),
                 price=models.F('product__price')
-        ):
-            OrderItem.objects.create(
-                title=cart_item.title,
-                price=cart_item.price,
-                count=cart_item.count,
+                )
+        OrderItem.objects.bulk_create([
+            OrderItem(
+                title=item.title,
+                price=item.price,
+                count=item.count,
                 order=order
             )
+            for item in cart_items
+            ])
 
     @property
     def total_price(self) -> float:
-        result = self.items.annotate(
-            price=models.ExpressionWrapper(
+        result = self.items.aggregate(
+            total=models.Sum(
                 models.F('price') * models.F('count'),
                 output_field=models.FloatField()
             )
-        ).aggregate(total=models.Sum('price'))
+        )
         return result.get('total') or 0.0
 
     class Meta:
@@ -60,7 +63,7 @@ class OrderItem(models.Model):
     """
     Товар в заказе покупателя
     """
-    title: str = models.CharField(max_length=63, verbose_name='Название')
+    title: str = models.CharField(max_length=63, verbose_name='Название товара')
     price: float = models.FloatField(verbose_name='Цена', validators=[MinValueValidator(1.0)])
     count: int = models.PositiveIntegerField(
         default=1,
@@ -76,6 +79,9 @@ class OrderItem(models.Model):
 
     def __str__(self) -> str:
         return f'{self.title} в заказе {self.order.pk}'
+
+    def total_price(self) -> float:
+        return self.price * self.count
 
     class Meta:
         db_table = 'order_items'
