@@ -5,7 +5,7 @@ from PIL import Image
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from shop.models import Category, Product
+from shop.models import Cart, Category, Product
 from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 
@@ -143,6 +143,10 @@ class CartTestCase(APITestCase):
             data={'count': 20}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        session_id = self.client.session.session_key
+        cart = Cart.objects.get(session_id=session_id)
+        self.assertEqual(cart.total_price, 6000.0)
 
     def test_clear_cart(self) -> None:
         response = self.client.post('/api/cart/clear/')

@@ -16,3 +16,7 @@ class Dev(Base):
             'NAME': os.path.join(Base.BASE_DIR, 'db.sqlite3'),
         }
     }
+
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+    EMAIL_FILE_PATH = os.path.join(Base.BASE_DIR, 'email')

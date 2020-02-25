@@ -53,6 +53,14 @@ class UiConfig(models.Model):
             return True
         return False
 
+    @classmethod
+    def get_active_config(cls) -> Optional['UiConfig']:
+        try:
+            config = cls.objects.get(is_active=True)
+        except cls.DoesNotExist:
+            return None
+        return config
+
     class Meta:
         db_table = 'ui_config'
         verbose_name = 'Конфигурация интерфейса'

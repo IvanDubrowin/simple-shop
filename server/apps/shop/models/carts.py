@@ -28,6 +28,16 @@ class Cart(models.Model):
         cart, _ = cls.objects.get_or_create(session_id=session_id)
         return cart
 
+    @property
+    def total_price(self) -> float:
+        result = self.products.annotate(
+            price=models.ExpressionWrapper(
+                models.F('product__price') * models.F('count'),
+                output_field=models.FloatField()
+            )
+        ).aggregate(total=models.Sum('price'))
+        return result.get('total') or 0.0
+
     class Meta:
         db_table = 'carts'
         verbose_name = 'Корзина'
