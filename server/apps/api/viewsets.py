@@ -9,6 +9,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from api.filters import IsPublishedFilter
+from api.paginators import (CartItemPagination, CategoryPagination,
+                            ProductPagination)
 from api.permissions import ActiveUiConfigIsReady
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
                              CategorySerializer, OrderCreateSerializer,
@@ -39,6 +42,8 @@ class CategoryViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_backends = (IsPublishedFilter,)
+    pagination_class = CategoryPagination
 
 
 class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -47,6 +52,8 @@ class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (IsPublishedFilter,)
+    pagination_class = ProductPagination
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
@@ -61,6 +68,7 @@ class CartItemViewSet(ModelViewSet):
     """
     queryset = CartItem.objects.all()
     serializer_class = CartItemEditSerializer
+    pagination_class = CartItemPagination
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         self.annotate_queryset()

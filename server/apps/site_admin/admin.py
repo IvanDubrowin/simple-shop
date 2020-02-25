@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from shop.models import Cart, CartItem, Category, Order, OrderItem, Product
-from site_admin.forms import UiConfigAdminForm, CaptchaAdminAuthenticationForm
+from site_admin.forms import CaptchaAdminAuthenticationForm, UiConfigAdminForm
 from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 admin.AdminSite.login_form = CaptchaAdminAuthenticationForm
@@ -49,16 +49,17 @@ class UiConfigAdmin(admin.ModelAdmin):
     form = UiConfigAdminForm
 
 
+class CartItemInline(admin.TabularInline):
+    model = CartItem
+    extra = 0
+
+
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_per_page = 25
-
-
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'count')
-    search_fields = ('__str__',)
-    list_per_page = 25
+    inlines = [
+        CartItemInline
+    ]
 
 
 @admin.register(Category)
@@ -87,26 +88,27 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'name',
         'phone_number',
-        'email'
+        'email',
+        'total_price'
     )
     search_fields = (
         'id',
+        'name',
         'phone_number',
         'email'
     )
     list_per_page = 20
-
-
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
-    list_display = (
-        '__str__',
-        'price',
-        'count'
-    )
-    list_per_page = 30
+    inlines = [
+        OrderItemInline
+    ]
