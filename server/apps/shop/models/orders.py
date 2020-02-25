@@ -97,7 +97,7 @@ class OrderItem(models.Model):
     class Meta:
         db_table = 'order_items'
         verbose_name = 'Элемент заказа'
-        verbose_name_plural = 'Элементы заказов'
+        verbose_name_plural = 'Элементы заказа'
         constraints = [
             models.UniqueConstraint(
                 fields=('title', 'order'),
