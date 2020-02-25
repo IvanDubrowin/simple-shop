@@ -18,6 +18,7 @@ class Base(Configuration):
         'templated_email',
         'rest_framework',
         'phonenumber_field',
+        'captcha',
         'core',
         'ui',
         'shop',
