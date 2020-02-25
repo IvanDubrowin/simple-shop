@@ -12,7 +12,8 @@ from api.filters import ActiveUiConfigFilter
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
                              CategorySerializer, ProductSerializer,
                              UiConfigSerializer)
-from core.models import Cart, CartItem, Category, Product, UiConfig
+from shop.models import Cart, CartItem, Category, Product
+from ui.models import UiConfig
 
 
 class UiConfigViewSet(GenericViewSet):

@@ -5,8 +5,8 @@ from PIL import Image
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from core.models import (Carousel, Category, ContactInfo, Content, Product,
-                         UiConfig)
+from shop.models import Category, Product
+from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 
 class UiConfigTestCase(APITestCase):
