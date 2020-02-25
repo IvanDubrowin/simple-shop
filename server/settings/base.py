@@ -15,6 +15,7 @@ class Base(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'django_cleanup.apps.CleanupConfig',
+        'djrichtextfield',
         'templated_email',
         'rest_framework',
         'phonenumber_field',
@@ -94,6 +95,20 @@ class Base(Configuration):
     TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 
     TEMPLATED_EMAIL_FILE_EXTENSION = 'html'
+
+    DJRICHTEXTFIELD_CONFIG = {
+        'js': ['//cdn.ckeditor.com/4.4.4/standard/ckeditor.js'],
+        'init_template': 'djrichtextfield/init/ckeditor.js',
+        'settings': {
+            'toolbar': [
+                {'items': ['Format', '-', 'Bold', 'Italic', '-', 'RemoveFormat']},
+                {'items': ['Link', 'Unlink', 'Image', 'Table']},
+                {'items': ['Source']}
+            ],
+            'format_tags': 'p;h1;h2;h3',
+            'width': 700
+        }
+    }
 
     @classmethod
     def post_setup(cls) -> None:

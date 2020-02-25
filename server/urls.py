@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('captcha/', include('captcha.urls')),
+    path('djrichtextfield/', include('djrichtextfield.urls'))
 ]
 
 if settings.DEBUG:

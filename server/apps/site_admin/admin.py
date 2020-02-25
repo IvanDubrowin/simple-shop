@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 from shop.models import Cart, CartItem, Category, Order, OrderItem, Product
-from site_admin.forms import CaptchaAdminAuthenticationForm, UiConfigAdminForm
+from site_admin.forms import (CaptchaAdminAuthenticationForm,
+                              ContactInfoAdminForm, ContentAdminForm,
+                              ProductAdminForm, UiConfigAdminForm)
 from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 admin.AdminSite.login_form = CaptchaAdminAuthenticationForm
@@ -32,6 +34,7 @@ class ContactInfoAdmin(admin.ModelAdmin):
         'vk'
     )
     list_per_page = 25
+    form = ContactInfoAdminForm
 
 
 @admin.register(Content)
@@ -39,6 +42,7 @@ class ContentAdmin(admin.ModelAdmin):
     list_display = ('title', 'shorten_text', 'image_tag')
     search_fields = ('title',)
     list_per_page = 10
+    form = ContentAdminForm
 
 
 @admin.register(UiConfig)
@@ -86,6 +90,7 @@ class ProductAdmin(admin.ModelAdmin):
         'category'
     )
     list_per_page = 10
+    form = ProductAdminForm
 
 
 class OrderItemInline(admin.TabularInline):
