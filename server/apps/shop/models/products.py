@@ -2,6 +2,7 @@ import os
 from textwrap import shorten
 
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.html import mark_safe
@@ -39,7 +40,7 @@ class Product(models.Model):
         related_name='products',
         verbose_name='Категория'
     )
-    price: float = models.FloatField(verbose_name='Цена')
+    price: float = models.FloatField(verbose_name='Цена', validators=[MinValueValidator(1.0)])
     description: str = models.TextField(blank=True, verbose_name='Описание товара')
     image: ImageFieldFile = models.ImageField(upload_to=hash_upload, verbose_name='Изображение', null=True)
 

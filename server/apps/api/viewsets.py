@@ -1,7 +1,7 @@
-from django.conf import settings
 from django.db.models import F
 from django.db.models.query import QuerySet
 from django.http import Http404
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
@@ -9,11 +9,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
+from api.permissions import ActiveUiConfigIsReady
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
-                             CategorySerializer, ProductSerializer,
-                             UiConfigSerializer)
+                             CategorySerializer, OrderCreateSerializer,
+                             ProductSerializer, UiConfigSerializer)
 from shop.models import Cart, CartItem, Category, Product
-from templated_email import send_templated_mail
 from ui.models import UiConfig
 
 
@@ -90,21 +90,15 @@ class CartItemViewSet(ModelViewSet):
         cart.products.all().delete()
         return Response({'success': 'Корзина очищена'})
 
-    @action(methods=['POST'], detail=False)
+    @action(
+        methods=['POST'],
+        detail=False,
+        permission_classes=(ActiveUiConfigIsReady,),
+        serializer_class=OrderCreateSerializer
+    )
     def create_order(self, request: Request) -> Response:
-        self.notify_seller(context={})
-        return Response({'success': 'Заказ отправлен'})
-
-    @staticmethod
-    def send_mail_to_customer(customer_email: str, context: dict) -> None:
-        pass
-
-    @staticmethod
-    def notify_seller(context: dict) -> None:
-        config = UiConfig.get_active_config()
-        send_templated_mail(
-            template_name='order',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[config.contact_info.email],
-            context=context
-        )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

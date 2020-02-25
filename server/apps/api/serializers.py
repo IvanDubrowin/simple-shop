@@ -1,11 +1,13 @@
 import os
 
 from django.conf import settings
+from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import (HiddenField, ModelSerializer,
                                         SerializerMethodField)
 from rest_framework.validators import UniqueTogetherValidator
+from templated_email import send_templated_mail
 
-from shop.models import Cart, CartItem, Category, Product
+from shop.models import Cart, CartItem, Category, Order, Product
 from ui.models import Carousel, ContactInfo, Content, UiConfig
 
 
@@ -93,3 +95,47 @@ class CartItemDetailSerializer(ModelSerializer):
     class Meta:
         model = CartItem
         exclude = ('cart',)
+
+
+class OrderCreateSerializer(ModelSerializer):
+    cart = HiddenField(default=CurrentCart())
+
+    @staticmethod
+    def validate_cart(cart: Cart) -> Cart:
+        if cart.products.count() == 0:
+            raise ValidationError('Корзина пустая')
+        return cart
+
+    def create(self, validated_data: dict) -> Order:
+        order = Order.create_from_cart(**validated_data)
+        context = {
+            'order': order,
+            'products': order.items.all(),
+            'total': order.total_price
+        }
+        self.send_mail_to_customer(context=context)
+        self.notify_seller(context=context)
+        return order
+
+    @staticmethod
+    def send_mail_to_customer(context: dict) -> None:
+        send_templated_mail(
+            template_name='order',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[context['order'].email],
+            context=context,
+        )
+
+    @staticmethod
+    def notify_seller(context: dict) -> None:
+        config = UiConfig.get_active_config()
+        send_templated_mail(
+            template_name='order',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[config.contact_info.email],
+            context=context,
+        )
+
+    class Meta:
+        model = Order
+        fields = '__all__'

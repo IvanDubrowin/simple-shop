@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from shop.models import Cart, CartItem, Category, Product
+from shop.models import Cart, CartItem, Category, Order, OrderItem, Product
 from site_admin.forms import UiConfigAdminForm
 from ui.models import Carousel, ContactInfo, Content, UiConfig
 
@@ -83,3 +83,28 @@ class ProductAdmin(admin.ModelAdmin):
         'category'
     )
     list_per_page = 10
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'phone_number',
+        'email'
+    )
+    search_fields = (
+        'id',
+        'phone_number',
+        'email'
+    )
+    list_per_page = 20
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = (
+        '__str__',
+        'price',
+        'count'
+    )
+    list_per_page = 30
