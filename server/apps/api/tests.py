@@ -158,7 +158,11 @@ class CartTestCase(APITestCase):
 
         response = self.client.post(
             '/api/cart/create_order/',
-            data={'phone_number': '+12125552368', 'email': 'test@test.com'}
+            data={
+                'name': 'test',
+                'phone_number': '+12125552368',
+                'email': 'test@test.com'
+                }
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -168,7 +172,11 @@ class CartTestCase(APITestCase):
 
         response = self.client.post(
             '/api/cart/create_order/',
-            data={'phone_number': '+12125552368', 'email': 'test@test.com'}
+            data={
+                'name': 'test',
+                'phone_number': '+12125552368',
+                'email': 'test@test.com'
+            }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -177,4 +185,4 @@ class CartTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/cart/')
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data['results'], [])

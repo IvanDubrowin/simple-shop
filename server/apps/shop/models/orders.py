@@ -2,6 +2,7 @@ from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from phonenumber_field.modelfields import PhoneNumberField
 
+from core.utils import admin_display
 from shop.models.carts import Cart
 
 
@@ -9,6 +10,7 @@ class Order(models.Model):
     """
     Заказ покупателя
     """
+    name: str = models.CharField(max_length=63, verbose_name='Имя покупателя')
     phone_number: str = PhoneNumberField(verbose_name='Номер телефона')
     email: str = models.EmailField(verbose_name='Email')
 
@@ -20,11 +22,17 @@ class Order(models.Model):
     def create_from_cart(
             cls,
             cart: Cart,
+            name: str,
             phone_number: str,
             email: str
     ) -> 'Order':
-        order = cls.objects.create(phone_number=phone_number, email=email)
+        order = cls.objects.create(
+            name=name,
+            phone_number=phone_number,
+            email=email
+        )
         cls.order_items_fabric(order, cart)
+        cart.products.all().delete()
         return order
 
     @staticmethod
@@ -43,7 +51,8 @@ class Order(models.Model):
             for item in cart_items
             ])
 
-    @property
+    @property  # type: ignore
+    @admin_display(short_description='Общая сумма')
     def total_price(self) -> float:
         result = self.items.aggregate(
             total=models.Sum(
@@ -80,6 +89,8 @@ class OrderItem(models.Model):
     def __str__(self) -> str:
         return f'{self.title} в заказе {self.order.pk}'
 
+    @property  # type: ignore
+    @admin_display(short_description='Сумма')
     def total_price(self) -> float:
         return self.price * self.count
 

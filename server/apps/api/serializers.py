@@ -113,12 +113,12 @@ class OrderCreateSerializer(ModelSerializer):
             'products': order.items.all(),
             'total': order.total_price
         }
-        self.send_mail_to_customer(context=context)
+        self.notify_customer(context=context)
         self.notify_seller(context=context)
         return order
 
     @staticmethod
-    def send_mail_to_customer(context: dict) -> None:
+    def notify_customer(context: dict) -> None:
         send_templated_mail(
             template_name='order',
             from_email=settings.DEFAULT_FROM_EMAIL,
