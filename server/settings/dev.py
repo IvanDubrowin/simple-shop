@@ -20,3 +20,5 @@ class Dev(Base):
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
     EMAIL_FILE_PATH = os.path.join(Base.BASE_DIR, 'email')
+
+    CORS_ORIGIN_ALLOW_ALL = True
