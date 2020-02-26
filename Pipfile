@@ -23,6 +23,7 @@ drf-nested-routers = "*"
 django-templated-email = "*"
 django-simple-captcha = "*"
 django-richtextfield = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
