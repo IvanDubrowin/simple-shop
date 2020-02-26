@@ -7,10 +7,10 @@ import {Content} from "./components/Content/Content";
 import {Shop} from "./components/Shop/Shop";
 import {ContactInfo} from "./components/ContactInfo/ContactInfo";
 
-const App = () => {
+const App = (props) => {
     return (
         <React.Fragment>
-            <Header/>
+            <Header data={props}/>
             <Switch>
                 <Route exact path='/' component={Content}/>
                 <Route path='/shop' component={Shop}/>
