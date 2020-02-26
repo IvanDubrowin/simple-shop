@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from phonenumber_field.modelfields import PhoneNumberField
@@ -53,14 +55,14 @@ class Order(models.Model):
 
     @property  # type: ignore
     @admin_display(short_description='Общая сумма')
-    def total_price(self) -> float:
+    def total_price(self) -> Decimal:
         result = self.items.aggregate(
             total=models.Sum(
                 models.F('price') * models.F('count'),
-                output_field=models.FloatField()
+                output_field=models.DecimalField(max_digits=2)
             )
         )
-        return result.get('total') or 0.0
+        return result.get('total') or Decimal(0.00)
 
     class Meta:
         db_table = 'orders'
@@ -73,7 +75,12 @@ class OrderItem(models.Model):
     Товар в заказе покупателя
     """
     title: str = models.CharField(max_length=63, verbose_name='Название товара')
-    price: float = models.FloatField(verbose_name='Цена', validators=[MinValueValidator(1.0)])
+    price: Decimal = models.DecimalField(
+        verbose_name='Цена',
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(1.00)]
+    )
     count: int = models.PositiveIntegerField(
         default=1,
         validators=[MinValueValidator(1)],
@@ -91,8 +98,8 @@ class OrderItem(models.Model):
 
     @property  # type: ignore
     @admin_display(short_description='Сумма')
-    def total_price(self) -> float:
-        return self.price * self.count
+    def total_price(self) -> Decimal:
+        return Decimal(round(self.price * self.count, 2))
 
     class Meta:
         db_table = 'order_items'
