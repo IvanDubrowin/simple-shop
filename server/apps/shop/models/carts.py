@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.sessions.models import Session
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -29,14 +31,14 @@ class Cart(models.Model):
         return cart
 
     @property
-    def total_price(self) -> float:
+    def total_price(self) -> Decimal:
         result = self.products.annotate(
             price=models.ExpressionWrapper(
                 models.F('product__price') * models.F('count'),
-                output_field=models.FloatField()
+                output_field=models.DecimalField(decimal_places=2)
             )
         ).aggregate(total=models.Sum('price'))
-        return result.get('total') or 0.0
+        return result.get('total') or Decimal(0.00)
 
     class Meta:
         db_table = 'carts'

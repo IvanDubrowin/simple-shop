@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 from textwrap import shorten
 
 from django.conf import settings
@@ -40,9 +41,14 @@ class Product(models.Model):
         related_name='products',
         verbose_name='Категория'
     )
-    price: float = models.FloatField(verbose_name='Цена', validators=[MinValueValidator(1.0)])
+    price: Decimal = models.DecimalField(
+        verbose_name='Цена',
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(1.00)]
+    )
     description: str = models.TextField(blank=True, verbose_name='Описание товара')
-    image: ImageFieldFile = models.ImageField(upload_to=hash_upload, verbose_name='Изображение', null=True)
+    image: ImageFieldFile = models.ImageField(upload_to=hash_upload, verbose_name='Изображение', blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -50,6 +56,8 @@ class Product(models.Model):
     @property  # type: ignore
     @admin_display(short_description='Изображение')
     def image_tag(self) -> str:
+        if not self.image:
+            return 'Нет изображения'
         image_path = os.path.join(settings.MEDIA_URL, self.image.url)
         return mark_safe(f'<img src="{image_path}" width="150" height="150" />')
 
