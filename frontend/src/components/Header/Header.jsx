@@ -1,10 +1,11 @@
 import React from "react";
-import {makeStyles} from '@material-ui/core/styles';
-import {useHistory} from "react-router-dom";
-import {AppBar} from "@material-ui/core";
-import {Typography} from "@material-ui/core";
-import {Toolbar} from "@material-ui/core";
-import {Button} from "@material-ui/core";
+import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+import { AppBar } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import { Toolbar } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 
 const useStyles = makeStyles({
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
     }
 });
 
-export const Header = (props) => {
+const Header = ({ title }) => {
     const classes = useStyles();
     const history = useHistory();
     const routeHandler = (url) => history.push(url);
@@ -27,6 +28,7 @@ export const Header = (props) => {
         <AppBar>
             <Toolbar className={classes.toolBar}>
                 <Typography variant="h6" className={classes.title}>
+                    {title}
                 </Typography>
                 <Button
                     className={classes.navButton}
@@ -47,3 +49,11 @@ export const Header = (props) => {
         </AppBar>
     )
 };
+
+let mapStateToProps = state => {
+    return {
+        title: state.config.title
+    }
+}
+
+export default connect(mapStateToProps)(Header);

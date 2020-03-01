@@ -1,29 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {BrowserRouter} from "react-router-dom";
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { getActiveConfig } from './services/dataLoaders';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import App from "./App";
+import { store } from "./redux/store";
+import * as serviceWorker from "./serviceWorker";
 
-let state = {
-    data: {},
-    loadData() {
-        getActiveConfig().then(res => this.data.config = res)
-    }
-};
-
-state.loadData();
-
-const render = (state) => {
-    ReactDOM.render(
-        <BrowserRouter>
-            <App data={state}/>
-        </BrowserRouter>,
-        document.getElementById('root')
-    );
-}
-
-render(state);
+ReactDOM.render(
+    <BrowserRouter>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </BrowserRouter>,
+    document.getElementById('root')
+);
 
 serviceWorker.unregister();
