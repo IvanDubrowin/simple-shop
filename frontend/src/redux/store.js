@@ -1,4 +1,5 @@
-import { compose, combineReducers, createStore, applyMiddleware } from "redux";
+import { compose, createStore, applyMiddleware } from "redux";
+import { combineReducers } from 'redux-immutable';
 import thunkMiddleware from "redux-thunk";
 import uiConfigReducer from "./reducers/config-reducer";
 

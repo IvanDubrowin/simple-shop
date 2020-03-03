@@ -52,7 +52,7 @@ const Header = ({ title }) => {
 
 let mapStateToProps = state => {
     return {
-        title: state.config.title
+        title: state.get('config').get('title')
     }
 }
 

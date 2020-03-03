@@ -1,9 +1,12 @@
 import React from "react";
+import ContentCarousel from "../Carousel/Carousel"
 
-export const Content = () => {
+const Content = () => {
     return (
         <React.Fragment>
-            <p>Главная</p>
+            <ContentCarousel />
         </React.Fragment>
     )
 };
+
+export default Content
