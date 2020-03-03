@@ -1,18 +1,19 @@
-import React from 'react';
+import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
-import { Content } from "./components/Content/Content";
+import Content  from "./components/Content/Content";
 import { Shop } from "./components/Shop/Shop";
 import { ContactInfo } from "./components/ContactInfo/ContactInfo";
-import { getUiConfig } from './redux/reducers/config-reducer';
+import { getUiConfig } from "./redux/reducers/config-reducer";
+import Preloader from "./components/Preloader/Preloader";
 
 const App = ({ initialized, getUiConfig }) => {
     if (!initialized) {
         getUiConfig();
+        return <Preloader/>
     }
-
     return (
         <React.Fragment>
             <Header />
@@ -26,10 +27,9 @@ const App = ({ initialized, getUiConfig }) => {
     )
 };
 
-let mapStateToProps = state => {
+const mapStateToProps = state => {
     return ({
-        initialized: state.config.initialized,
-        title: state.config.title
+        initialized: state.get('config').get('initialized'),
     })
 }
 
