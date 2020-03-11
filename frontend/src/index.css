@@ -1,0 +1,9 @@
+html > body > #root > div {
+    min-height: calc(100vh - 70px);
+  }
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+  }
