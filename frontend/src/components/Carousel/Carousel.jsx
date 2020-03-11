@@ -4,18 +4,22 @@ import { Carousel } from 'react-responsive-carousel';
 import { makeStyles } from "@material-ui/core/styles";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     imageContainer: {
         height: 600
     }
-});
+}));
 
 
 const ContentCarousel = ({ first_image, second_image }) => {
     const classes = useStyles();
 
     return (
-        <Carousel autoPlay={true}>
+        <Carousel
+            autoPlay={true}
+            showThumbs={false}
+            showStatus={false}
+        >
             <div className={classes.imageContainer}>
                 <img src={first_image} />
             </div>
