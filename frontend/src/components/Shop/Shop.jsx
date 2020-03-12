@@ -1,29 +1,35 @@
 import React from "react";
-
 import { makeStyles } from "@material-ui/core/styles";
+import CategoriesMenu  from "./Categories";
+import { ProductsList } from "./Products";
 
 const useStyles = makeStyles(theme => ({
     categoriesMenuWrapper: {
-        width: '85%',
+        width: '15%',
         minHeight: 'calc(100vh - 53x)c',
         background: '#ccc',
-        float: 'right'
+        float: 'left',
+        marginTop: '90px'
     },
     productsListWrapper: {
-        width: '15%',
+        width: '85%',
         minHeight: 'calc(100vh - 53px)',
         background: '#c00',
-        marginRight: '70%'
+        float: 'right'
     }
 }));
 
 export const Shop = () => {
-    const classes = useStyles();
 
+    const classes = useStyles();
     return (
         <React.Fragment>
-            <div className={classes.categoriesMenuWrapper}></div>
-            <div className={classes.productsListWrapper}></div>
+            <div className={classes.categoriesMenuWrapper}>
+                <CategoriesMenu/>
+            </div>
+            <div className={classes.productsListWrapper}>
+                <ProductsList/>
+            </div>
         </React.Fragment>
     )
 };
