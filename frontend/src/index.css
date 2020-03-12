@@ -1,5 +1,5 @@
 html > body > #root > div {
-    min-height: calc(100vh - 70px);
+    min-height: calc(100vh - 53px);
   }
 
 body {

@@ -5,7 +5,7 @@ const useStyles = makeStyles(theme => ({
     stickToBottom: {
         backgroundColor: '#1983AB',
         textAlign: 'center',
-        height: '20px',
+        minHeight: '19px',
         padding: '17px',
         flexShrink: 0
     },
