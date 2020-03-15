@@ -3,38 +3,36 @@ import loadCategories from "../../services/api/shop";
 
 const SET_CATEGORIES = 'SET_CATEGORIES';
 
-const LOAD_CATEGORIES = 'LOAD_CATEGORIES';
+const SET_FIRST_CATEGORY = 'SET_FIRST_CATEGORY';
 
 let initialState = Map({
-    isLoading: false,
-    count: null,
-    next: null,
-    previous: null,
-    results: List()
+    firstCategory: null,
+    data: List()
 });
 
-export const setCategories = (count, next, previous, results) => ({
+const setFirstCategory = firstCategory => ({
+    type: SET_FIRST_CATEGORY,
+    payload: { firstCategory }
+})
+
+const setCategories = data => ({
     type: SET_CATEGORIES,
-    payload: { count, next, previous, results }
-});
-
-export const setLoading = () => ({
-    type: LOAD_CATEGORIES
+    payload: { data }
 });
 
 export const getCategories = () => async dispatch => {
-    dispatch(setLoading());
-    let categories = await loadCategories();
-    let { count, next, previous, results } = categories;
-    dispatch(setCategories(count, next, previous, results));
+    const data = await loadCategories()
+    const firstCategory = data[0]
+    dispatch(setCategories(data))
+    dispatch(setFirstCategory(firstCategory))
 }
 
 const categoriesReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_CATEGORIES:
-            return state.merge(fromJS({ ...action.payload, isLoading: false }))
-        case LOAD_CATEGORIES:
-            return state.merge(fromJS({ isLoading: true }))
+            return state.merge(fromJS({ ...action.payload }))
+        case SET_FIRST_CATEGORY:
+            return state.merge(fromJS({ ...action.payload }))
         default:
             return state
     }

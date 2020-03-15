@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Carousel } from 'react-responsive-carousel';
+import Carousel from 'react-responsive-carousel/lib/components/Carousel';
 import { makeStyles } from "@material-ui/core/styles";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 

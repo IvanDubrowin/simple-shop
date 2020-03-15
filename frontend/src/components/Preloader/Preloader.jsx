@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
     spinner: {
+        minHeight: 'initial',
         position: 'absolute',
         top: '45%',
         left: '50%'
@@ -12,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 
 const Preloader = () => {
     const classes = useStyles();
-    return <CircularProgress className={classes.spinner} />
+    return <CircularProgress disableShrink className={classes.spinner} />
 }
 
 export default Preloader;

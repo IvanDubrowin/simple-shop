@@ -8,24 +8,33 @@ import Content from "./components/Content/Content";
 import { Shop } from "./components/Shop/Shop";
 import { ContactInfo } from "./components/ContactInfo/ContactInfo";
 import { getUiConfig } from "./redux/reducers/config-reducer";
+import { getCategories } from "./redux/reducers/categories-reducer";
 import Preloader from "./components/Preloader/Preloader";
 
 const theme = createMuiTheme({});
 
 const useStyles = makeStyles(theme => ({
     contentWrapper: {
+        minHeight: 'calc(100vh - 53px)',
         flex: '1 0 auto',
         justifyContent: 'center'
     }
 }));
 
 
-const App = ({ initialized, getUiConfig }) => {
+const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
     const classes = useStyles();
 
     if (!initialized) {
-        getUiConfig();
+        getUiConfig()
+        getCategories()
         return <ThemeProvider theme={theme}><Preloader /></ThemeProvider>
+    }
+    const getShopComponent = (firstCategory) => {
+        if (firstCategory) {
+            return <Route path='/shop/categories/:id' component={Shop} />
+        }
+        return null
     }
     return (
         <React.Fragment>
@@ -34,7 +43,7 @@ const App = ({ initialized, getUiConfig }) => {
                 <div className={classes.contentWrapper}>
                     <Switch>
                         <Route exact path='/' component={Content} />
-                        <Route path='/shop' component={Shop} />
+                        {getShopComponent(firstCategory)}
                         <Route path='/contacts' component={ContactInfo} />
                     </Switch>
                 </div>
@@ -47,7 +56,8 @@ const App = ({ initialized, getUiConfig }) => {
 const mapStateToProps = state => {
     return ({
         initialized: state.get('config').get('initialized'),
+        firstCategory: state.get('categories').get('firstCategory')
     })
 }
 
-export default connect(mapStateToProps, { getUiConfig })(App);
+export default connect(mapStateToProps, { getUiConfig, getCategories })(App);

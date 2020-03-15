@@ -6,26 +6,19 @@ import { ProductsList } from "./Products";
 const useStyles = makeStyles(theme => ({
     categoriesMenuWrapper: {
         width: '15%',
-        minHeight: 'calc(100vh - 53x)c',
-        background: '#ccc',
-        float: 'left',
-        marginTop: '90px'
+        marginTop: '80px'
     },
     productsListWrapper: {
-        width: '85%',
-        minHeight: 'calc(100vh - 53px)',
-        background: '#c00',
-        float: 'right'
+        width: '85%'
     }
 }));
 
 export const Shop = () => {
-
     const classes = useStyles();
     return (
         <React.Fragment>
             <div className={classes.categoriesMenuWrapper}>
-                <CategoriesMenu/>
+                <CategoriesMenu />
             </div>
             <div className={classes.productsListWrapper}>
                 <ProductsList/>

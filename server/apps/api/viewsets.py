@@ -10,8 +10,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from api.filters import IsPublishedFilter
-from api.paginators import (CartItemPagination, CategoryPagination,
-                            ProductPagination)
+from api.paginators import CartItemPagination, ProductPagination
 from api.permissions import ActiveUiConfigIsReady
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
                              CategorySerializer, OrderCreateSerializer,
@@ -43,7 +42,6 @@ class CategoryViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (IsPublishedFilter,)
-    pagination_class = CategoryPagination
 
 
 class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):

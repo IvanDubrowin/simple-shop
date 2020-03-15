@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import ContentCarousel from "../Carousel/Carousel"
+import ContentCarousel from "../Carousel/Carousel";
 
 const Content = ({ text }) => {
 

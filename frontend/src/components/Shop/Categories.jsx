@@ -1,41 +1,46 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import { Button } from "@material-ui/core";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from "@material-ui/core/styles";
-import { getCategories } from "../../redux/reducers/categories-reducer";
 
 const useStyles = makeStyles(theme => ({
 
 }));
 
-const CategoryItem = ({ title }) => {
+const CategoryItem = ({ id, title }) => {
     const classes = useStyles();
-    return  <li>{title}</li>
+    const history = useHistory();
+    const routeHandler = url => history.push(url);
+    return  (
+        <ListItem>
+            <Button
+                onClick={() => routeHandler(`/shop/categories/${id}`)}>
+                {title}
+            </Button>
+        </ListItem>
+        )
 };
 
-const CategoriesMenu = ({ 
-    isLoading,
-    count,
-    next,
-    previous,
-    results,
-    getCategories 
-}) => {
-    const classes = useStyles();
-    if (!isLoading && count === null) {
-        getCategories();
-    }
-    let categories = results.map(category => <CategoryItem title={category.get('title')}/>)
-    return <ul>{categories}</ul>
+const CategoriesMenu = ({ data }) => {
+    const classes = useStyles()
+    let categories = data.map(
+        category => (
+            <CategoryItem 
+                id={category.get('id')} 
+                title={category.get('title')}
+            />
+            )
+        )
+    return <List>{categories}</List>
 };
 
 const mapStateToProps = state => {
     return ({
-        isLoading: state.get('categories').get('isLoading'),
-        count: state.get('categories').get('count'),
-        next: state.get('categories').get('next'),
-        previous: state.get('categories').get('previous'),
-        results: state.get('categories').get('results'),
+        data: state.get('categories').get('data')
     })
 }
 
-export default connect(mapStateToProps, { getCategories })(CategoriesMenu);
+export default connect(mapStateToProps)(CategoriesMenu);
