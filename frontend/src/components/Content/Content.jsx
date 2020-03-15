@@ -1,14 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
+import { makeStyles } from '@material-ui/core/styles';
 import ContentCarousel from "../Carousel/Carousel";
 
-const Content = ({ text }) => {
+const useStyles = makeStyles(theme => ({
+    contentWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '8px'
+    }
+}));
 
+const Content = ({ text }) => {
+    const classes = useStyles()
     return (
-        <React.Fragment>
-            <ContentCarousel />
+        <div className={classes.contentWrapper}>
+            <ContentCarousel/>
             <div dangerouslySetInnerHTML={{ __html: text }}></div>
-        </React.Fragment>
+        </div>
     )
 };
 

@@ -1,5 +1,5 @@
 import { Map, List, fromJS } from 'immutable';
-import loadCategories from "../../services/api/shop";
+import { loadCategories } from "../../services/api/shop";
 
 const SET_CATEGORIES = 'SET_CATEGORIES';
 

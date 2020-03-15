@@ -1,9 +1,13 @@
 import { API } from "./base"
-import { CATEGORIES_ENDPOINT } from "../../constants/api"
+import { CATEGORIES_ENDPOINT, RELATED_PRODUCTS, PAGE } from "../../constants/api"
 
-const loadCategories = async (data) => {
+export const loadCategories = async () => {
     const res = await API.get(CATEGORIES_ENDPOINT)
     return res.data
 }
 
-export default loadCategories;
+export const loadProducts  = async (category, page) => {
+    const url = `${CATEGORIES_ENDPOINT}${category}${RELATED_PRODUCTS}${PAGE}${page}`
+    const res = await API.get(url)
+    return res.data
+}

@@ -14,10 +14,12 @@ import Preloader from "./components/Preloader/Preloader";
 const theme = createMuiTheme({});
 
 const useStyles = makeStyles(theme => ({
-    contentWrapper: {
+    mainWrapper: {
+        display: 'flex',
         minHeight: 'calc(100vh - 53px)',
         flex: '1 0 auto',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: '80px'
     }
 }));
 
@@ -40,7 +42,7 @@ const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
         <React.Fragment>
             <ThemeProvider theme={theme}>
                 <Header />
-                <div className={classes.contentWrapper}>
+                <div className={classes.mainWrapper}>
                     <Switch>
                         <Route exact path='/' component={Content} />
                         {getShopComponent(firstCategory)}
