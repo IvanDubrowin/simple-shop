@@ -21,8 +21,8 @@ const setProducts = (
         payload: { count, next, previous, results }
 })
 
-export const fetchProducts = (category, page) => async dispatch => {
-    const { count, next, previous, results } = await loadProducts(category, page)
+export const fetchProducts = (categoryId, page) => async dispatch => {
+    const { count, next, previous, results } = await loadProducts(categoryId, page)
     dispatch(setProducts(count, next, previous, results))
 }
 

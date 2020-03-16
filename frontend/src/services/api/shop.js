@@ -6,8 +6,8 @@ export const loadCategories = async () => {
     return res.data
 }
 
-export const loadProducts  = async (category, page) => {
-    const url = `${CATEGORIES_ENDPOINT}${category}${RELATED_PRODUCTS}${PAGE}${page}`
+export const loadProducts  = async (categoryId, page) => {
+    const url = `${CATEGORIES_ENDPOINT}${categoryId}${RELATED_PRODUCTS}${PAGE}${page}`
     const res = await API.get(url)
     return res.data
 }

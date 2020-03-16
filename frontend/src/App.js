@@ -5,7 +5,7 @@ import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/sty
 import Header from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 import Content from "./components/Content/Content";
-import { Shop } from "./components/Shop/Shop";
+import Shop from "./components/Shop/Shop";
 import { ContactInfo } from "./components/ContactInfo/ContactInfo";
 import { getUiConfig } from "./redux/reducers/config-reducer";
 import { getCategories } from "./redux/reducers/categories-reducer";
