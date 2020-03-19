@@ -11,7 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddShoppingCartSharpIcon from '@material-ui/icons/AddShoppingCartSharp';
-import { DEFAULT_IMAGE } from "../../constants/shop";
+import Pagination from '@material-ui/lab/Pagination';
+import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
+import { fetchProducts } from "../../redux/reducers/products-reducer";
 
 const useStyles = makeStyles(theme => ({
     product: {
@@ -27,6 +29,17 @@ const useStyles = makeStyles(theme => ({
     },
     actionButton: {
         padding: '5px'
+    },
+    productsListWrapper: {
+        display: 'flex',
+        flexFlow: 'wrap',
+        flexBasis: '80%',
+        flexGrow: 4,
+        margin: '20px auto 0',
+        justifyContent: 'center'
+    },
+    paginationWrapper: {
+        padding: '10px'
     }
 }));
 
@@ -85,8 +98,19 @@ const Product = ({
 }
 
 const ProductsList = ({
-    results
+    results,
+    categoryId,
+    fetchProducts,
+    productCount,
+    currentPage
 }) => {
+    const classes = useStyles();
+    const pagesCount = Math.ceil(productCount / PRODUCTS_PER_PAGE);
+    const pageChange = (event, value) => {
+        if (!(value == currentPage)) {
+            fetchProducts(categoryId, value)
+        }
+      };
     let products = results.map(
         product => (
             <Product
@@ -102,16 +126,27 @@ const ProductsList = ({
     )
 
     return (
-        <React.Fragment>
+        <div className={classes.productsListWrapper}>
             {products}
-        </React.Fragment>
+            <div className={classes.paginationWrapper}>
+                <Pagination 
+                    count={pagesCount}
+                    page={currentPage}
+                    onChange={pageChange}
+                    variant="outlined" 
+                    color="primary"
+                />
+            </div>
+        </div>
     )
 };
 
 const mapStateToProps = state => {
     return ({
-        results: state.get('products').get('results')
+        results: state.get('products').get('results'),
+        productCount: state.get('products').get('count'),
+        currentPage: state.get('products').get('page'),
     })
 }
 
-export default connect(mapStateToProps)(ProductsList);
+export default connect(mapStateToProps, { fetchProducts })(ProductsList);
