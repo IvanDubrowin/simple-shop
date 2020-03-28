@@ -1,41 +1,48 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { connect } from "react-redux";
-import { Button } from "@material-ui/core";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react"
+import { useHistory } from "react-router-dom"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import Fab from '@material-ui/core/Fab'
 
 const useStyles = makeStyles(theme => ({
+    categoryItem: {
+        margin: '8px'
+    }
+}))
 
-}));
+const CategoryItem = ({ id, title, currentCategory }) => {
+    const isCurrent = +currentCategory === +id
 
-const CategoryItem = ({ id, title }) => {
-    const classes = useStyles();
-    const history = useHistory();
-    const routeHandler = url => history.push(url);
-    return  (
-        <ListItem>
-            <Button
-                onClick={() => routeHandler(`/shop/categories/${id}`)}>
-                {title}
-            </Button>
-        </ListItem>
-        )
-};
-
-const CategoriesMenu = ({ data }) => {
     const classes = useStyles()
+
+    const history = useHistory()
+
+    const routeHandler = url => history.push(url)
+
+    return  (
+        <Fab variant="extended"
+             size="medium"
+             color={isCurrent ? 'secondary' : 'default'}
+             className={classes.categoryItem}
+             onClick={() => routeHandler(`/shop/categories/${id}`)}
+             >
+            {title}
+        </Fab>
+        )
+}
+
+const CategoriesList = ({ currentCategory, data }) => {
     let categories = data.map(
         category => (
             <CategoryItem 
                 id={category.get('id')} 
                 title={category.get('title')}
+                currentCategory={currentCategory}
             />
             )
         )
-    return <List>{categories}</List>
-};
+    return <React.Fragment>{categories}</React.Fragment>
+}
 
 const mapStateToProps = state => {
     return ({
@@ -43,4 +50,4 @@ const mapStateToProps = state => {
     })
 }
 
-export default connect(mapStateToProps)(CategoriesMenu);
+export default connect(mapStateToProps)(CategoriesList)

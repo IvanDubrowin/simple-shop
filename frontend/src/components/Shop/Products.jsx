@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from 'clsx';
+import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -17,9 +18,7 @@ import { fetchProducts } from "../../redux/reducers/products-reducer";
 
 const useStyles = makeStyles(theme => ({
     product: {
-        flex: '1 0 21%',
-        margin: '0 1% 20px',
-        flexBasis: '23%'
+        margin: '10px'
     },
     image: {
         height: 250,
@@ -30,16 +29,8 @@ const useStyles = makeStyles(theme => ({
     actionButton: {
         padding: '5px'
     },
-    productsListWrapper: {
-        display: 'flex',
-        flexFlow: 'wrap',
-        flexBasis: '80%',
-        flexGrow: 4,
-        margin: '20px auto 0',
-        justifyContent: 'center'
-    },
-    paginationWrapper: {
-        padding: '10px'
+    pagination: {
+        padding: '25px'
     }
 }));
 
@@ -59,41 +50,43 @@ const Product = ({
         setExpanded(!expanded);
     };
     return (
-        <Card className={classes.product}>
-            <CardMedia
-                className={classes.image}
-                image={!(image) ? defaultImage : image}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                    {title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    <h2>Цена {price} руб.</h2>
-                </Typography>
-            </CardContent>
-            <CardActions className={classes.actions}>
-                <IconButton
-                    className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                >
-                    <ExpandMoreIcon />
-                </IconButton>
-                <IconButton>
-                    <AddShoppingCartSharpIcon />
-                </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Grid item xs={6} sm={3}>
+            <Card className={classes.product}>
+                <CardMedia
+                    className={classes.image}
+                    image={!(image) ? defaultImage : image}
+                />
                 <CardContent>
-                    <Typography>
-                        {description}
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        <h2>Цена {price} руб.</h2>
                     </Typography>
                 </CardContent>
-            </Collapse>
-        </Card>
+                <CardActions className={classes.actions}>
+                    <IconButton
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: expanded,
+                        })}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                    >
+                        <ExpandMoreIcon />
+                    </IconButton>
+                    <IconButton>
+                        <AddShoppingCartSharpIcon />
+                    </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                        <Typography>
+                            {description}
+                        </Typography>
+                    </CardContent>
+                </Collapse>
+            </Card>
+        </Grid>
     )
 }
 
@@ -107,10 +100,10 @@ const ProductsList = ({
     const classes = useStyles();
     const pagesCount = Math.ceil(productCount / PRODUCTS_PER_PAGE);
     const pageChange = (event, value) => {
-        if (!(value == currentPage)) {
+        if (!(value === currentPage)) {
             fetchProducts(categoryId, value)
         }
-      };
+    };
     let products = results.map(
         product => (
             <Product
@@ -126,18 +119,31 @@ const ProductsList = ({
     )
 
     return (
-        <div className={classes.productsListWrapper}>
-            {products}
-            <div className={classes.paginationWrapper}>
-                <Pagination 
+        <React.Fragment>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+            >
+                {products}
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+            >
+                <Pagination
+                    className={classes.pagination}
                     count={pagesCount}
                     page={currentPage}
                     onChange={pageChange}
-                    variant="outlined" 
                     color="primary"
+                    size="large"
                 />
-            </div>
-        </div>
+            </Grid>
+        </React.Fragment>
     )
 };
 

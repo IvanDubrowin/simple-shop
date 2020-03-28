@@ -32,7 +32,7 @@ const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
         getCategories()
         return <ThemeProvider theme={theme}><Preloader /></ThemeProvider>
     }
-    const getShopComponent = (firstCategory) => {
+    const ShopComponent = ({ firstCategory }) => {
         if (firstCategory) {
             return <Route path='/shop/categories/:id' component={Shop} />
         }
@@ -45,8 +45,8 @@ const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
                 <div className={classes.mainWrapper}>
                     <Switch>
                         <Route exact path='/' component={Content} />
-                        {getShopComponent(firstCategory)}
-                        <Route path='/contacts' component={ContactInfo} />
+                        <ShopComponent firstCategory={firstCategory}/>
+                        <Route path='/contacts' component={ContactInfo}/>
                     </Switch>
                 </div>
                 <Footer />
