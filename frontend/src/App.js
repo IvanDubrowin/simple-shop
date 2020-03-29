@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
+import grey from '@material-ui/core/colors/grey';
 import Header from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 import Content from "./components/Content/Content";
@@ -11,7 +12,13 @@ import { getUiConfig } from "./redux/reducers/config-reducer";
 import { getCategories } from "./redux/reducers/categories-reducer";
 import Preloader from "./components/Preloader/Preloader";
 
-const theme = createMuiTheme({});
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: grey[900]
+        }
+    }
+});
 
 const useStyles = makeStyles(theme => ({
     mainWrapper: {

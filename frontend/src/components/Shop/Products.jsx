@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
@@ -9,9 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddShoppingCartSharpIcon from '@material-ui/icons/AddShoppingCartSharp';
+import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
 import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
@@ -21,13 +18,10 @@ const useStyles = makeStyles(theme => ({
         margin: '10px'
     },
     image: {
-        height: 250,
-    },
-    actions: {
-        float: 'right'
+        paddingTop: '100%'
     },
     actionButton: {
-        padding: '5px'
+        margin: '5px'
     },
     pagination: {
         padding: '25px'
@@ -50,7 +44,7 @@ const Product = ({
         setExpanded(!expanded);
     };
     return (
-        <Grid item xs={6} sm={3}>
+        <Grid item xs={12} sm={3}>
             <Card className={classes.product}>
                 <CardMedia
                     className={classes.image}
@@ -64,23 +58,33 @@ const Product = ({
                         <h2>Цена {price} руб.</h2>
                     </Typography>
                 </CardContent>
-                <CardActions className={classes.actions}>
-                    <IconButton
-                        className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded,
-                        })}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                    >
-                        <ExpandMoreIcon />
-                    </IconButton>
-                    <IconButton>
-                        <AddShoppingCartSharpIcon />
-                    </IconButton>
+                <CardActions>
+                    <Grid container justify="flex-end">
+                        <Button
+                            className={classes.actionButton}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            variant="contained"
+                            color="primary"
+                        >
+                            <Typography>
+                                Описание
+                        </Typography>
+                        </Button>
+                        <Button
+                            className={classes.actionButton}
+                            color="primary"
+                            variant="contained"
+                        >
+                            <Typography>
+                                В корзину
+                        </Typography>
+                        </Button>
+                    </Grid>
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        <Typography>
+                        <Typography paragraph>
                             {description}
                         </Typography>
                     </CardContent>

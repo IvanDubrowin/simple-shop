@@ -14,7 +14,7 @@ const Shop = ({ match, fetchProducts }) => {
 
     return (
         <Grid 
-            container spacing={5}
+            container
             justify="center"
             alignItems="center"
             >
