@@ -4,13 +4,14 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
+                                   RetrieveModelMixin, DestroyModelMixin)
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from api.filters import IsPublishedFilter
-from api.paginators import CartItemPagination, ProductPagination
+from api.paginators import ProductPagination
 from api.permissions import ActiveUiConfigIsReady
 from api.serializers import (CartItemDetailSerializer, CartItemEditSerializer,
                              CategorySerializer, OrderCreateSerializer,
@@ -60,13 +61,18 @@ class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         return queryset.filter(category=category)
 
 
-class CartItemViewSet(ModelViewSet):
+class CartItemViewSet(
+    GenericViewSet,
+    ListModelMixin,
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin
+):
     """
     Api товаров в корзине пользователя
     """
     queryset = CartItem.objects.all()
     serializer_class = CartItemEditSerializer
-    pagination_class = CartItemPagination
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         self.annotate_queryset()

@@ -1,33 +1,41 @@
 import React from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
+import Badge from '@material-ui/core/Badge';
+import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
-import { AppBar } from "@material-ui/core";
+import { AppBar, IconButton } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { Toolbar } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
-import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
+import { CART_MAX_TOTAL_PRICE } from "../../constants/shop";
 
 const useStyles = makeStyles(theme => ({
     headerWrapper: {
-        flexShrink: 0
+        padding: '6px'
     },
     toolBar: {
-        display: 'flex'
+        display: 'flex',
+        justify: 'spaceBetween'
     },
-    title: {
-        flexGrow: 1
+    titleWrapper: {
+        flexGrow: 1,
+    },
+    titleButton: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 35,
     },
     navButton: {
+        color: 'white',
         fontWeight: 'bold',
-        color: 'inherit',
-        padding: '10px'
+        fontSize: 35,
     },
     cartIcon: {
-        fontSize: 35,
-        padding: '10px'
+        color: 'white',
+        fontSize: 35
     }
 }));
 
@@ -41,59 +49,95 @@ const HideOnScroll = ({ children, window }) => {
     );
 }
 
-const Header = ({ title, firstCategory }) => {
+const Header = ({ title, firstCategory, cartPriceCount }) => {
     const classes = useStyles();
+
     const history = useHistory();
+
     const routeHandler = url => history.push(url);
-    const getShopButton = (firstCategory) => {
-        if(firstCategory) {
+
+    const Title = ({ title }) => (
+        <div className={classes.titleWrapper}>
+            <Button
+                className={classes.titleButton}
+                onClick={() => routeHandler("/")}>
+                <Typography variant="h6">
+                    {title}
+                </Typography>
+            </Button>
+        </div>
+    )
+
+    const ShopButton = ({ firstCategory }) => {
+        if (firstCategory) {
+
             const id = firstCategory.get('id')
+
             const url = `/shop/categories/${id}`
+
             return (
-                <Button
-                    className={classes.navButton}
-                    onClick={() => routeHandler(url)}>
-                    Магазин
-                </Button>
+                <React.Fragment>
+                    <Button
+                        className={classes.navButton}
+                        onClick={() => routeHandler(url)}>
+                        <Typography variant="h6">
+                            Магазин
+                        </Typography>
+                    </Button>
+                </React.Fragment>
             )
         }
         return null
     }
-    const getCartIcon = (firstCategory) => {
-        if(firstCategory) {
-            return <ShoppingCartSharpIcon className={classes.cartIcon}/>
+
+    const CartIcon = ({ firstCategory, cartPriceCount }) => {
+        if (firstCategory) {
+            return (
+                <IconButton onClick={() => routeHandler('/cart')}>
+                    <Badge
+                        badgeContent={cartPriceCount}
+                        color="secondary"
+                        max={CART_MAX_TOTAL_PRICE}
+                        showZero
+                    >
+                        <ShoppingCartSharpIcon className={classes.cartIcon} />
+                    </Badge>
+                </IconButton>
+            )
         }
         return null
     }
+
     return (
-        <HideOnScroll>
-            <AppBar>
-                <Toolbar className={classes.toolBar}>
-                    <Typography variant="h6" className={classes.title}>
-                        {title}
-                    </Typography>
-                    <Button
-                        className={classes.navButton}
-                        onClick={() => routeHandler("/")}>
-                        Главная
-                    </Button>
-                    {getShopButton(firstCategory)}
-                    <Button
-                        className={classes.navButton}
-                        onClick={() => routeHandler("/contacts")}>
-                        Контакты
-                    </Button>
-                    {getCartIcon(firstCategory)}
-                </Toolbar>
-            </AppBar>
-        </HideOnScroll>
+        <React.Fragment>
+            <HideOnScroll>
+                <AppBar className={classes.headerWrapper}>
+                    <Toolbar className={classes.toolBar}>
+                        <Title title={title} />
+                        <ShopButton firstCategory={firstCategory} />
+                        <Button
+                            className={classes.navButton}
+                            onClick={() => routeHandler("/contacts")}>
+                            <Typography variant="h6">
+                                Контакты
+                            </Typography>
+                        </Button>
+                        <CartIcon
+                            firstCategory={firstCategory}
+                            cartPriceCount={cartPriceCount}
+                        />
+                    </Toolbar>
+                </AppBar >
+            </HideOnScroll>
+        </React.Fragment>
     )
 };
 
 let mapStateToProps = state => {
     return {
         title: state.get('config').get('title'),
-        firstCategory: state.get('categories').get('firstCategory')
+        firstCategory: state.get('categories').get('firstCategory'),
+        cartPriceCount: state.get('cart').get('priceCount')
     }
 }
 
