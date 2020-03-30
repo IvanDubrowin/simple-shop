@@ -12,6 +12,8 @@ import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
 import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
+import { addCartItem } from "../../redux/reducers/cart-reducer";
+
 
 const useStyles = makeStyles(theme => ({
     product: {
@@ -29,17 +31,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Product = ({
-    id,
+    productId,
     title,
     is_recommend,
     is_top,
     price,
     description,
-    image
+    image,
+    addCartItem,
+    cartItems
 }) => {
     const classes = useStyles();
     const defaultImage = DEFAULT_IMAGE
     const [expanded, setExpanded] = React.useState(false);
+    const inCart = cartItems.get(productId) ? true : false
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -73,12 +78,13 @@ const Product = ({
                         </Button>
                         <Button
                             className={classes.actionButton}
-                            color="primary"
+                            onClick={() => addCartItem(productId, 1)}
+                            color={inCart ? "secondary" : "primary"}
                             variant="contained"
                         >
                             <Typography>
-                                В корзину
-                        </Typography>
+                                {inCart ? "В корзине" : "В корзину"}
+                            </Typography>
                         </Button>
                     </Grid>
                 </CardActions>
@@ -98,8 +104,10 @@ const ProductsList = ({
     results,
     categoryId,
     fetchProducts,
+    addCartItem,
     productCount,
-    currentPage
+    currentPage,
+    cartItems
 }) => {
     const classes = useStyles();
     const pagesCount = Math.ceil(productCount / PRODUCTS_PER_PAGE);
@@ -111,13 +119,15 @@ const ProductsList = ({
     let products = results.map(
         product => (
             <Product
-                id={product.get('id')}
+                productId={product.get('id')}
                 title={product.get('title')}
                 is_recommend={product.get('is_recommend')}
                 is_top={product.get('is_top')}
                 price={product.get('price')}
                 description={product.get('description')}
                 image={product.get('image')}
+                addCartItem={addCartItem}
+                cartItems={cartItems}
             />
         )
     )
@@ -156,7 +166,8 @@ const mapStateToProps = state => {
         results: state.get('products').get('results'),
         productCount: state.get('products').get('count'),
         currentPage: state.get('products').get('page'),
+        cartItems: state.get('cart').get('items')
     })
 }
 
-export default connect(mapStateToProps, { fetchProducts })(ProductsList);
+export default connect(mapStateToProps, { fetchProducts, addCartItem })(ProductsList);

@@ -1,10 +1,11 @@
 import os
+from typing import Optional
 
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import IntegerField, CharField
 from rest_framework.serializers import (HiddenField, ModelSerializer,
                                         SerializerMethodField)
-from rest_framework.validators import UniqueTogetherValidator
 from templated_email import send_templated_mail
 
 from shop.models import Cart, CartItem, Category, Order, Product
@@ -63,16 +64,30 @@ class CurrentCart:
 
 class CartItemEditSerializer(ModelSerializer):
     cart = HiddenField(default=CurrentCart())
+    title = CharField(read_only=True)
+    price = IntegerField(read_only=True)
+    image = CharField(read_only=True)
+
+    def create(self, validated_data: dict) -> CartItem:
+        product = validated_data.pop('product')
+        cart_item, _ = CartItem.objects.update_or_create(
+            cart=validated_data.pop('cart'),
+            product=product,
+            defaults=dict(**validated_data)
+        )
+        cart_item.title = product.title
+        cart_item.price = product.price
+        cart_item.image = self.get_image(product)
+        return cart_item
+
+    @staticmethod
+    def get_image(product: Product) -> Optional[str]:
+        if product.image:
+            return os.path.join(settings.MEDIA_URL, product.image)
 
     class Meta:
         model = CartItem
         fields = '__all__'
-        validators = [
-            UniqueTogetherValidator(
-                queryset=model.objects.all(),
-                fields=('cart', 'product')
-            )
-        ]
 
 
 class CartItemDetailSerializer(ModelSerializer):
@@ -89,8 +104,9 @@ class CartItemDetailSerializer(ModelSerializer):
         return cart_item.price
 
     @staticmethod
-    def get_image(cart_item: CartItem) -> str:
-        return os.path.join(settings.MEDIA_URL, cart_item.image)
+    def get_image(cart_item: CartItem) -> Optional[str]:
+        if cart_item.image:
+            return os.path.join(settings.MEDIA_URL, cart_item.image)
 
     class Meta:
         model = CartItem

@@ -7,9 +7,11 @@ import Header from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 import Content from "./components/Content/Content";
 import Shop from "./components/Shop/Shop";
+import Cart from "./components/Cart/Cart";
 import { ContactInfo } from "./components/ContactInfo/ContactInfo";
 import { getUiConfig } from "./redux/reducers/config-reducer";
 import { getCategories } from "./redux/reducers/categories-reducer";
+import { getCartData } from "./redux/reducers/cart-reducer";
 import Preloader from "./components/Preloader/Preloader";
 
 const theme = createMuiTheme({
@@ -31,17 +33,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
+const App = ({
+    initialized,
+    firstCategory,
+    getUiConfig,
+    getCategories,
+    getCartData
+}) => {
     const classes = useStyles();
 
     if (!initialized) {
         getUiConfig()
         getCategories()
+        getCartData()
         return <ThemeProvider theme={theme}><Preloader /></ThemeProvider>
     }
-    const ShopComponent = ({ firstCategory }) => {
+    const ShopComponents = ({ firstCategory }) => {
         if (firstCategory) {
-            return <Route path='/shop/categories/:id' component={Shop} />
+            return (
+                <React.Fragment>
+                    <Route path='/shop/categories/:id' component={Shop} />
+                    <Route path='/cart' component={Cart} />
+                </React.Fragment>
+            )
         }
         return null
     }
@@ -52,8 +66,8 @@ const App = ({ initialized, firstCategory, getUiConfig, getCategories }) => {
                 <div className={classes.mainWrapper}>
                     <Switch>
                         <Route exact path='/' component={Content} />
-                        <ShopComponent firstCategory={firstCategory}/>
-                        <Route path='/contacts' component={ContactInfo}/>
+                        <ShopComponents firstCategory={firstCategory} />
+                        <Route path='/contacts' component={ContactInfo} />
                     </Switch>
                 </div>
                 <Footer />
@@ -69,4 +83,4 @@ const mapStateToProps = state => {
     })
 }
 
-export default connect(mapStateToProps, { getUiConfig, getCategories })(App);
+export default connect(mapStateToProps, { getUiConfig, getCategories, getCartData })(App);

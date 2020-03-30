@@ -1,18 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
+import Badge from '@material-ui/core/Badge';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
-import { AppBar } from "@material-ui/core";
+import { AppBar, IconButton } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { Toolbar } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import Slide from "@material-ui/core/Slide";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
+import { CART_MAX_TOTAL_PRICE } from "../../constants/shop";
 
 const useStyles = makeStyles(theme => ({
     headerWrapper: {
-        flexShrink: 0
+        padding: '6px'
     },
     toolBar: {
         display: 'flex',
@@ -24,18 +26,16 @@ const useStyles = makeStyles(theme => ({
     titleButton: {
         color: 'white',
         fontWeight: 'bold',
-        padding: '10px',
         fontSize: 35,
     },
     navButton: {
         color: 'white',
         fontWeight: 'bold',
-        padding: '10px',
         fontSize: 35,
     },
     cartIcon: {
-        fontSize: 35,
-        padding: '10px'
+        color: 'white',
+        fontSize: 35
     }
 }));
 
@@ -49,7 +49,7 @@ const HideOnScroll = ({ children, window }) => {
     );
 }
 
-const Header = ({ title, firstCategory }) => {
+const Header = ({ title, firstCategory, cartPriceCount }) => {
     const classes = useStyles();
 
     const history = useHistory();
@@ -90,9 +90,20 @@ const Header = ({ title, firstCategory }) => {
         return null
     }
 
-    const CartIcon = ({ firstCategory }) => {
+    const CartIcon = ({ firstCategory, cartPriceCount }) => {
         if (firstCategory) {
-            return <ShoppingCartSharpIcon className={classes.cartIcon} />
+            return (
+                <IconButton onClick={() => routeHandler('/cart')}>
+                    <Badge
+                        badgeContent={cartPriceCount}
+                        color="secondary"
+                        max={CART_MAX_TOTAL_PRICE}
+                        showZero
+                    >
+                        <ShoppingCartSharpIcon className={classes.cartIcon} />
+                    </Badge>
+                </IconButton>
+            )
         }
         return null
     }
@@ -100,7 +111,7 @@ const Header = ({ title, firstCategory }) => {
     return (
         <React.Fragment>
             <HideOnScroll>
-                <AppBar>
+                <AppBar className={classes.headerWrapper}>
                     <Toolbar className={classes.toolBar}>
                         <Title title={title} />
                         <ShopButton firstCategory={firstCategory} />
@@ -111,7 +122,10 @@ const Header = ({ title, firstCategory }) => {
                                 Контакты
                             </Typography>
                         </Button>
-                        <CartIcon firstCategory={firstCategory} />
+                        <CartIcon
+                            firstCategory={firstCategory}
+                            cartPriceCount={cartPriceCount}
+                        />
                     </Toolbar>
                 </AppBar >
             </HideOnScroll>
@@ -122,7 +136,8 @@ const Header = ({ title, firstCategory }) => {
 let mapStateToProps = state => {
     return {
         title: state.get('config').get('title'),
-        firstCategory: state.get('categories').get('firstCategory')
+        firstCategory: state.get('categories').get('firstCategory'),
+        cartPriceCount: state.get('cart').get('priceCount')
     }
 }
 
