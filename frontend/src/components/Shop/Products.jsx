@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import { Tooltip } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Collapse from '@material-ui/core/Collapse';
@@ -10,10 +11,11 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
+import StarSharpIcon from '@material-ui/icons/StarSharp';
+import ThumbUpAltSharpIcon from '@material-ui/icons/ThumbUpAltSharp';
 import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
 import { addCartItem } from "../../redux/reducers/cart-reducer";
-
 
 const useStyles = makeStyles(theme => ({
     product: {
@@ -27,8 +29,45 @@ const useStyles = makeStyles(theme => ({
     },
     pagination: {
         padding: '25px'
+    },
+    iconWidget: {
+        padding: '5px',
+        fontSize: '30px'
     }
 }));
+
+const ProductWidgets = ({ is_recommend, is_top }) => {
+    const classes = useStyles()
+
+    const IsRecommend = () => {
+        if(is_recommend) {
+            return (
+                <Tooltip className={classes.iconWidget} title="Рекомендовано">
+                    <ThumbUpAltSharpIcon/>
+                </Tooltip>
+            )
+        }
+        return null
+    }
+
+    const IsTop = () => {
+        if(is_top) {
+            return (
+                <Tooltip className={classes.iconWidget} title="Топ">
+                    <StarSharpIcon/>
+                </Tooltip>
+            )
+        }
+        return null
+    }
+
+    return (
+        <Typography>
+            <IsRecommend/>
+            <IsTop/>
+        </Typography>
+    )
+}
 
 const Product = ({
     productId,
@@ -59,8 +98,11 @@ const Product = ({
                     <Typography gutterBottom variant="h5" component="h2">
                         {title}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography color="textSecondary" component="p">
                         <h2>Цена {price} руб.</h2>
+                    </Typography>
+                    <Typography>
+                        <ProductWidgets is_recommend={is_recommend} is_top={is_top}/>
                     </Typography>
                 </CardContent>
                 <CardActions>
