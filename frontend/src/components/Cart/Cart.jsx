@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     cartContainer: {
         marginTop: '80px',
         marginBottom: '80px',
-        padding: '5px'
+        padding: '5px',
     },
     counter: {
         '&:disabled': {
@@ -37,6 +37,9 @@ const useStyles = makeStyles(theme => ({
     productTitle: {
         display: 'flex',
         alignContent: 'center'
+    },
+    paper: {
+        boxShadow: '0 0 5px',
     }
 }))
 
@@ -73,7 +76,7 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
     return (
         <TableRow key={productId}>
             <TableCell>
-                <img src={image} className={classes.image}/>
+                <img src={image} className={classes.image} />
             </TableCell>
             <TableCell>
                 <Typography>
@@ -102,6 +105,17 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
 const Cart = ({ items, addCartItem, deleteCartItem, priceCount }) => {
     const classes = useStyles()
 
+    const OrderButton = ({ priceCount }) => {
+        if(priceCount > 0) {
+            return (
+                <Button variant="outlined" size="medium" color="primary">
+                    Заказать
+                </Button>
+            )
+        }
+        return null
+    } 
+
     const cartItems = items.map(
         (value, key) => (
             <CartItem
@@ -114,42 +128,48 @@ const Cart = ({ items, addCartItem, deleteCartItem, priceCount }) => {
     )
 
     return (
-        <Grid
-            container
-            className={classes.cartContainer}
-            justify="center"
-        >
-            <Grid item xs={12} sm={8}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell colSpan={2}>Товар</TableCell>
-                                <TableCell>Цена</TableCell>
-                                <TableCell>Количество</TableCell>
-                                <TableCell>Сумма</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {[...cartItems.values()]}
-                        </TableBody>
-                        <TableFooter>
-                            <TableCell colSpan={2}>
-                                <Typography>
-                                    Общая сумма:
+        <React.Fragment>
+            <Grid
+                container
+                className={classes.cartContainer}
+                direction="row"
+                justify="center"
+            >
+                <Grid item xs={12} sm={8}>
+                    <TableContainer className={classes.paper} component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell colSpan={2}>Товар</TableCell>
+                                    <TableCell>Цена</TableCell>
+                                    <TableCell>Количество</TableCell>
+                                    <TableCell>Сумма</TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {[...cartItems.values()]}
+                            </TableBody>
+                            <TableFooter>
+                                <TableCell colSpan={2}>
+                                    <Typography>
+                                        Общая сумма:
                                 </Typography>
-                            </TableCell>
-                            <TableCell colSpan={2}>
-                                <Typography>
-                                    {priceCount}
-                                </Typography>
-                            </TableCell>
-                        </TableFooter>
-                    </Table>
-                </TableContainer>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography>
+                                        {priceCount}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right" colSpan={3}>
+                                    <OrderButton priceCount={priceCount}/>
+                                </TableCell>
+                            </TableFooter>
+                        </Table>
+                    </TableContainer>
+                </Grid>
             </Grid>
-        </Grid>
+        </React.Fragment>
     )
 }
 

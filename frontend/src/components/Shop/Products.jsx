@@ -19,7 +19,8 @@ import { addCartItem } from "../../redux/reducers/cart-reducer";
 
 const useStyles = makeStyles(theme => ({
     product: {
-        margin: '10px'
+        margin: '10px',
+        boxShadow: '0 0 5px',
     },
     image: {
         paddingTop: '100%'
@@ -111,7 +112,7 @@ const Product = ({
                             className={classes.actionButton}
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
-                            variant="contained"
+                            variant="outlined"
                             color="primary"
                         >
                             <Typography>
@@ -122,7 +123,7 @@ const Product = ({
                             className={classes.actionButton}
                             onClick={() => addCartItem(productId, 1)}
                             color={inCart ? "secondary" : "primary"}
-                            variant="contained"
+                            variant="outlined"
                         >
                             <Typography>
                                 {inCart ? "В корзине" : "В корзину"}
