@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Grid from '@material-ui/core/Grid';
@@ -11,25 +11,44 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
 import { deleteCartItem, addCartItem } from "../../redux/reducers/cart-reducer";
+import { DEFAULT_IMAGE } from "../../constants/shop";
 
 const useStyles = makeStyles(theme => ({
     cartContainer: {
         marginTop: '80px',
         marginBottom: '80px',
         padding: '5px'
+    },
+    counter: {
+        '&:disabled': {
+            color: theme.palette.grey[900]
+        }
+    },
+    image: {
+        flex: 1,
+        width: 50,
+        height: 50,
+        resizeMode: 'contain'
+    },
+    productTitle: {
+        display: 'flex',
+        alignContent: 'center'
     }
 }))
 
 const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
+    const classes = useStyles()
+
     const handleIncrement = () => {
         addCartItem(productId, ++count)
     }
 
     const handleDecrement = () => {
-        if(count > 1) {
+        if (count > 1) {
             addCartItem(productId, --count)
         } else {
             deleteCartItem(productId)
@@ -39,7 +58,7 @@ const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
     return (
         <ButtonGroup>
             <Button onClick={handleDecrement}>-</Button>
-            <Button disabled>{count}</Button>
+            <Button className={classes.counter} disabled>{count}</Button>
             <Button onClick={handleIncrement}>+</Button>
         </ButtonGroup>
     )
@@ -47,9 +66,20 @@ const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
 }
 
 const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
+    const classes = useStyles()
+
+    const image = (!item.image) ? DEFAULT_IMAGE : item.image
+
     return (
         <TableRow key={productId}>
-            <TableCell>{item.title}</TableCell>
+            <TableCell>
+                <img src={image} className={classes.image}/>
+            </TableCell>
+            <TableCell>
+                <Typography>
+                    {item.title}
+                </Typography>
+            </TableCell>
             <TableCell>{item.price}</TableCell>
             <TableCell>
                 <CartItemCounter
@@ -58,7 +88,7 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
                     addCartItem={addCartItem}
                     deleteCartItem={deleteCartItem}
                 />
-                </TableCell>
+            </TableCell>
             <TableCell>{item.price * item.count}</TableCell>
             <TableCell>
                 <IconButton onClick={() => deleteCartItem(productId)}>
@@ -69,7 +99,7 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
     )
 }
 
-const Cart = ({ items, addCartItem, deleteCartItem }) => {
+const Cart = ({ items, addCartItem, deleteCartItem, priceCount }) => {
     const classes = useStyles()
 
     const cartItems = items.map(
@@ -94,7 +124,7 @@ const Cart = ({ items, addCartItem, deleteCartItem }) => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Товар</TableCell>
+                                <TableCell colSpan={2}>Товар</TableCell>
                                 <TableCell>Цена</TableCell>
                                 <TableCell>Количество</TableCell>
                                 <TableCell>Сумма</TableCell>
@@ -104,6 +134,18 @@ const Cart = ({ items, addCartItem, deleteCartItem }) => {
                         <TableBody>
                             {[...cartItems.values()]}
                         </TableBody>
+                        <TableFooter>
+                            <TableCell colSpan={2}>
+                                <Typography>
+                                    Общая сумма:
+                                </Typography>
+                            </TableCell>
+                            <TableCell colSpan={2}>
+                                <Typography>
+                                    {priceCount}
+                                </Typography>
+                            </TableCell>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
             </Grid>
@@ -113,7 +155,8 @@ const Cart = ({ items, addCartItem, deleteCartItem }) => {
 
 const mapStateToProps = state => {
     return {
-        items: state.get('cart').get('items')
+        items: state.get('cart').get('items'),
+        priceCount: state.get('cart').get('priceCount')
     }
 }
 

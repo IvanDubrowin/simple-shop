@@ -80,10 +80,10 @@ class CartItemEditSerializer(ModelSerializer):
         cart_item.image = self.get_image(product)
         return cart_item
 
-    @staticmethod
-    def get_image(product: Product) -> Optional[str]:
+    def get_image(self, product: Product) -> Optional[str]:
         if product.image:
-            return os.path.join(settings.MEDIA_URL, product.image)
+            url = os.path.join(settings.MEDIA_URL, product.image.name)
+            return self.context['request'].build_absolute_uri(url)
 
     class Meta:
         model = CartItem
@@ -103,10 +103,10 @@ class CartItemDetailSerializer(ModelSerializer):
     def get_price(cart_item: CartItem) -> str:
         return cart_item.price
 
-    @staticmethod
-    def get_image(cart_item: CartItem) -> Optional[str]:
+    def get_image(self, cart_item: CartItem) -> Optional[str]:
         if cart_item.image:
-            return os.path.join(settings.MEDIA_URL, cart_item.image)
+            url = os.path.join(settings.MEDIA_URL, cart_item.image)
+            return self.context['request'].build_absolute_uri(url)
 
     class Meta:
         model = CartItem
