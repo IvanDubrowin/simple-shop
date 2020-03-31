@@ -5,7 +5,7 @@ const LOAD_CART = 'LOAD_CART'
 
 const ADD_TO_CART = 'ADD_TO_CART'
 
-const DELETE_PRODUCT_IN_CART = 'DELETE_PRODUCT_IN_CART'
+const DELETE_ITEM = 'DELETE_ITEM'
 
 let initialState = Map({
     priceCount: 0,
@@ -22,8 +22,12 @@ const addToCartAction = item => ({
     payload: item
 })
 
+const deleteProductAction = productId => ({
+    type: DELETE_ITEM,
+    payload: productId
+})
+
 const getPriceCount = cartData => {
-    console.log(cartData)
     return cartData.reduce(
         (total, item, _) => total + (item.count * item.price),
         initialState.get('priceCount')
@@ -57,13 +61,17 @@ export const addCartItem = (productId, count) => async dispatch => {
     dispatch(addToCartAction(item))
 }
 
-const cartReducer = (state = initialState, action) => {
+export const deleteCartItem = productId => async dispatch => {
+    await deleteProductInCart(productId)
+    dispatch(deleteProductAction(productId))
+}
+
+const cartReducer = (state = initialState, action) => {    
     switch (action.type) {
         case LOAD_CART:
             return state.merge(fromJS({ ...action.payload }))
         case ADD_TO_CART:
             const item = action.payload
-
             state = state.setIn(
                 ['items' , item.product], {
                     id: item.id,
@@ -73,9 +81,10 @@ const cartReducer = (state = initialState, action) => {
                     count: item.count
                 }
             )
-            const priceCount = getPriceCount(state.get('items'))
-
-            return state.setIn(['priceCount'], priceCount)
+            return state.setIn(['priceCount'], getPriceCount(state.get('items')))
+        case DELETE_ITEM:
+            state = state.deleteIn(['items', action.payload])
+            return state.setIn(['priceCount'], getPriceCount(state.get('items')))
         default:
             return state
     }

@@ -17,8 +17,16 @@ class Dev(Base):
         }
     }
 
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'api.auth.CsrfExemptSessionAuthentication',
+        ]
+    }
+
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
     EMAIL_FILE_PATH = os.path.join(Base.BASE_DIR, 'email')
 
-    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+
+    CORS_ALLOW_CREDENTIALS = True

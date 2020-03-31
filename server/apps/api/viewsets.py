@@ -73,6 +73,7 @@ class CartItemViewSet(
     """
     queryset = CartItem.objects.all()
     serializer_class = CartItemEditSerializer
+    lookup_field = 'product_id'
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         self.annotate_queryset()

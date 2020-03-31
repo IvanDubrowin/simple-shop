@@ -22,4 +22,4 @@ export const addToCart = async (productId, count) => {
     return res.data
 }
 
-export const deleteProductInCart = async id => await API.delete(`${CART_ENDPOINT}${id}`)
+export const deleteProductInCart = async id => await API.delete(`${CART_ENDPOINT}${id}/`)
