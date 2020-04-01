@@ -1,5 +1,5 @@
 import { API } from "./base"
-import { CATEGORIES_ENDPOINT, RELATED_PRODUCTS, PAGE, CART_ENDPOINT } from "../../constants/api"
+import { CATEGORIES_ENDPOINT, RELATED_PRODUCTS, PAGE, CART_ENDPOINT, CREATE_ORDER } from "../../constants/api"
 
 export const loadCategories = async () => {
     const res = await API.get(CATEGORIES_ENDPOINT)
@@ -23,3 +23,10 @@ export const addToCart = async (productId, count) => {
 }
 
 export const deleteProductInCart = async id => await API.delete(`${CART_ENDPOINT}${id}/`)
+
+
+export const createOrder = async(name, phoneNumber, email) => {
+    const url = `${CART_ENDPOINT}${CREATE_ORDER}`
+    const res = await API.post(url, { name, phone_number: phoneNumber, email })
+    return res.data
+}

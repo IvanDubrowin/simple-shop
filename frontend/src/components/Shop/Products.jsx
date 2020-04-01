@@ -17,6 +17,8 @@ import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
 import { addCartItem } from "../../redux/reducers/cart-reducer";
 
+const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
+
 const useStyles = makeStyles(theme => ({
     product: {
         margin: '10px',
@@ -100,7 +102,7 @@ const Product = ({
                         {title}
                     </Typography>
                     <Typography color="textSecondary" component="p">
-                        <h2>Цена {price} руб.</h2>
+                        <h2>{currencyFormatter.format(price)}</h2>
                     </Typography>
                     <Typography>
                         <ProductWidgets is_recommend={is_recommend} is_top={is_top}/>

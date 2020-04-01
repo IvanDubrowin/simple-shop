@@ -12,6 +12,8 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
 import { CART_MAX_TOTAL_PRICE } from "../../constants/shop";
 
+const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
+
 const useStyles = makeStyles(theme => ({
     headerWrapper: {
         padding: '6px'
@@ -95,7 +97,7 @@ const Header = ({ title, firstCategory, cartPriceCount }) => {
             return (
                 <IconButton onClick={() => routeHandler('/cart')}>
                     <Badge
-                        badgeContent={cartPriceCount}
+                        badgeContent={currencyFormatter.format(cartPriceCount)}
                         color="secondary"
                         max={CART_MAX_TOTAL_PRICE}
                         showZero

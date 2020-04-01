@@ -9,3 +9,5 @@ export const CART_ENDPOINT = 'cart/'
 export const RELATED_PRODUCTS = '/products/'
 
 export const PAGE = '?page='
+
+export const CREATE_ORDER = 'create_order/'

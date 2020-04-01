@@ -1,9 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import { Map, fromJS } from 'immutable';
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import MaskedInput from 'react-text-mask';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,10 +17,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
+import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
-import { deleteCartItem, addCartItem } from "../../redux/reducers/cart-reducer";
-import { DEFAULT_IMAGE } from "../../constants/shop";
+import CartItem from "./CartItem";
+import { createOrder } from "../../services/api/shop";
+import { setOrderCreated } from "../../redux/reducers/cart-reducer";
+
+const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
 
 const useStyles = makeStyles(theme => ({
     cartContainer: {
@@ -23,109 +31,161 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '80px',
         padding: '5px',
     },
-    counter: {
-        '&:disabled': {
-            color: theme.palette.grey[900]
-        }
-    },
-    image: {
-        flex: 1,
-        width: 50,
-        height: 50,
-        resizeMode: 'contain'
-    },
-    productTitle: {
-        display: 'flex',
-        alignContent: 'center'
-    },
     paper: {
         boxShadow: '0 0 5px',
+    },
+    orderModal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    orderForm: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(2, 4, 3),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& > div': {
+            margin: '10px'
+        },
+        '& > button': {
+            margin: '10px'
+        }
     }
 }))
 
-const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
+
+const Cart = ({ items, priceCount, setOrderCreated }) => {
     const classes = useStyles()
 
-    const handleIncrement = () => {
-        addCartItem(productId, ++count)
-    }
+    const [open, setOpen] = React.useState(false)
 
-    const handleDecrement = () => {
-        if (count > 1) {
-            addCartItem(productId, --count)
-        } else {
-            deleteCartItem(productId)
-        }
-    }
+    const handleOpenOrderForm = () => setOpen(true)
 
-    return (
-        <ButtonGroup>
-            <Button onClick={handleDecrement}>-</Button>
-            <Button className={classes.counter} disabled>{count}</Button>
-            <Button onClick={handleIncrement}>+</Button>
-        </ButtonGroup>
-    )
-
-}
-
-const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
-    const classes = useStyles()
-
-    const image = (!item.image) ? DEFAULT_IMAGE : item.image
-
-    return (
-        <TableRow key={productId}>
-            <TableCell>
-                <img src={image} className={classes.image} />
-            </TableCell>
-            <TableCell>
-                <Typography>
-                    {item.title}
-                </Typography>
-            </TableCell>
-            <TableCell>{item.price}</TableCell>
-            <TableCell>
-                <CartItemCounter
-                    count={item.count}
-                    productId={productId}
-                    addCartItem={addCartItem}
-                    deleteCartItem={deleteCartItem}
-                />
-            </TableCell>
-            <TableCell>{item.price * item.count}</TableCell>
-            <TableCell>
-                <IconButton onClick={() => deleteCartItem(productId)}>
-                    <DeleteSharpIcon />
-                </IconButton>
-            </TableCell>
-        </TableRow>
-    )
-}
-
-const Cart = ({ items, addCartItem, deleteCartItem, priceCount }) => {
-    const classes = useStyles()
+    const handleCloseOrderForm = () => setOpen(false)
 
     const OrderButton = ({ priceCount }) => {
-        if(priceCount > 0) {
+        if (priceCount > 0) {
             return (
-                <Button variant="outlined" size="medium" color="primary">
+                <Button
+                    variant="outlined"
+                    size="medium"
+                    color="primary"
+                    onClick={handleOpenOrderForm}
+                >
                     Заказать
                 </Button>
             )
         }
         return null
-    } 
+    }
 
-    const cartItems = items.map(
-        (value, key) => (
-            <CartItem
-                item={value}
-                productId={key}
-                addCartItem={addCartItem}
-                deleteCartItem={deleteCartItem}
-            />
+    const PhoneMask = (props) => {
+        const { inputRef, ...other } = props
+      
+        return (
+          <MaskedInput
+            {...other}
+            ref={(ref) => {
+              inputRef(ref ? ref.inputElement : null);
+            }}
+            mask={
+                ['+', /[1-9]/, '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]
+            }
+            placeholderChar={'\u2000'}
+            showMask
+          />
         )
-    )
+      }
+
+    const OrderForm = () => {
+        const history = useHistory()
+
+        const [name, setName] = React.useState('')
+
+        const [phoneNumber, setPhoneNumber] = React.useState('+7(999)999-99-99')
+
+        const [email, setEmail] = React.useState('')
+
+        const [errors, setErrors] = React.useState(Map({
+            name: null,
+            phone_number: null,
+            email: null
+        }))
+
+        const handleSubmit = event => {
+            createOrder(name, phoneNumber.replace(/[^+\d]/g, ''), email)
+                .then(() => {
+                        setOrderCreated()
+                        history.push('/')
+                    }
+                )
+                .catch(error => setErrors(fromJS(error.response.data)))
+        }
+
+        return (
+            <Modal
+                className={classes.orderModal}
+                open={open}
+                onClose={handleCloseOrderForm}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={open}>
+                    <form className={classes.orderForm}>
+                        <TextField 
+                            variant="outlined"
+                            id="name" 
+                            label="Имя покупателя" 
+                            color="secondary"
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            error={errors.get('name') != null}
+                            helperText={errors.get('name') != null ? errors.get('name').first() : ''}
+                            required
+                        />
+                        <TextField
+                            variant="outlined"
+                            id="phone_number"
+                            label="Номер телефона"
+                            color="secondary"
+                            InputProps={{inputComponent: PhoneMask}}
+                            value={phoneNumber}
+                            onChange={(event) => setPhoneNumber(event.target.value)}
+                            error={errors.get('phone_number') != null}
+                            helperText={errors.get('phone_number') != null ? errors.get('phone_number').first() : ''}
+                            required
+                        />
+                        <TextField
+                            variant="outlined"
+                            id="email" 
+                            label="Email" 
+                            color="secondary"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            error={errors.get('email') != null}
+                            helperText={errors.get('email') != null ? errors.get('email').first() : ''}
+                            required
+                        />
+                        <Button 
+                            onClick={handleSubmit}
+                            variant="outlined"
+                            size="medium"
+                            color="primary"
+                        >
+                            Подтвердить
+                        </Button>
+                    </form>
+                </Fade>
+            </Modal>
+        )
+    }
+
+    const cartItems = items.map((value, key) => <CartItem item={value} productId={key} />)
 
     return (
         <React.Fragment>
@@ -158,11 +218,12 @@ const Cart = ({ items, addCartItem, deleteCartItem, priceCount }) => {
                                 </TableCell>
                                 <TableCell>
                                     <Typography>
-                                        {priceCount}
+                                        {currencyFormatter.format(priceCount)}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="right" colSpan={3}>
-                                    <OrderButton priceCount={priceCount}/>
+                                    <OrderButton priceCount={priceCount} />
+                                    <OrderForm />
                                 </TableCell>
                             </TableFooter>
                         </Table>
@@ -180,4 +241,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { addCartItem, deleteCartItem })(Cart);
+export default connect(mapStateToProps, { setOrderCreated })(Cart);
