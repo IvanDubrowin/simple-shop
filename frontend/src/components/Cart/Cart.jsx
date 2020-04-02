@@ -31,9 +31,6 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '80px',
         padding: '5px',
     },
-    paper: {
-        boxShadow: '0 0 5px',
-    },
     orderModal: {
         display: 'flex',
         alignItems: 'center',
@@ -57,6 +54,12 @@ const useStyles = makeStyles(theme => ({
 
 
 const Cart = ({ items, priceCount, setOrderCreated }) => {
+    const history = useHistory()
+
+    if (priceCount === 0) {
+        history.push('/')
+    }
+
     const classes = useStyles()
 
     const [open, setOpen] = React.useState(false)
@@ -100,8 +103,6 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
       }
 
     const OrderForm = () => {
-        const history = useHistory()
-
         const [name, setName] = React.useState('')
 
         const [phoneNumber, setPhoneNumber] = React.useState('+7(999)999-99-99')
@@ -196,7 +197,7 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
                 justify="center"
             >
                 <Grid item xs={12} sm={8}>
-                    <TableContainer className={classes.paper} component={Paper}>
+                    <TableContainer>
                         <Table>
                             <TableHead>
                                 <TableRow>

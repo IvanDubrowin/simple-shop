@@ -4,11 +4,10 @@ import { Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Header from "./components/Header/Header";
-import { Footer } from "./components/Footer/Footer";
+import Footer from "./components/Footer/Footer";
 import Content from "./components/Content/Content";
 import Shop from "./components/Shop/Shop";
 import Cart from "./components/Cart/Cart";
-import { ContactInfo } from "./components/ContactInfo/ContactInfo";
 import { getUiConfig } from "./redux/reducers/config-reducer";
 import { getCategories } from "./redux/reducers/categories-reducer";
 import { getCartData } from "./redux/reducers/cart-reducer";
@@ -25,7 +24,7 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(theme => ({
     mainWrapper: {
         display: 'flex',
-        minHeight: 'calc(100vh - 53px)',
+        minHeight: 'calc(100vh - 245px)',
         flex: '1 0 auto',
         justifyContent: 'center',
         marginTop: '80px'
@@ -66,7 +65,6 @@ const App = ({
                     <Switch>
                         <Route exact path='/' component={Content} />
                         <ShopComponents firstCategory={firstCategory} />
-                        <Route path='/contacts' component={ContactInfo} />
                     </Switch>
                 </div>
                 <Footer />

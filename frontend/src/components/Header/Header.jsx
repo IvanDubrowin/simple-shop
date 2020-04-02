@@ -16,11 +16,11 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', cu
 
 const useStyles = makeStyles(theme => ({
     headerWrapper: {
-        padding: '6px'
+        padding: '3px'
     },
     toolBar: {
         display: 'flex',
-        justify: 'spaceBetween'
+        justify: 'spaceBetween',
     },
     titleWrapper: {
         flexGrow: 1,
@@ -28,16 +28,16 @@ const useStyles = makeStyles(theme => ({
     titleButton: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 35,
+        fontSize: '1.5em'
     },
     navButton: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 35,
+        fontSize: '1.5em',
     },
     cartIcon: {
         color: 'white',
-        fontSize: 35
+        fontSize: '1.2em'
     }
 }));
 
@@ -82,7 +82,7 @@ const Header = ({ title, firstCategory, cartPriceCount }) => {
                     <Button
                         className={classes.navButton}
                         onClick={() => routeHandler(url)}>
-                        <Typography variant="h6">
+                        <Typography>
                             Магазин
                         </Typography>
                     </Button>
@@ -95,7 +95,10 @@ const Header = ({ title, firstCategory, cartPriceCount }) => {
     const CartIcon = ({ firstCategory, cartPriceCount }) => {
         if (firstCategory) {
             return (
-                <IconButton onClick={() => routeHandler('/cart')}>
+                <IconButton 
+                    onClick={() => routeHandler('/cart')}
+                    disabled={cartPriceCount === 0 ? true : false}
+                >
                     <Badge
                         badgeContent={currencyFormatter.format(cartPriceCount)}
                         color="secondary"
@@ -117,13 +120,6 @@ const Header = ({ title, firstCategory, cartPriceCount }) => {
                     <Toolbar className={classes.toolBar}>
                         <Title title={title} />
                         <ShopButton firstCategory={firstCategory} />
-                        <Button
-                            className={classes.navButton}
-                            onClick={() => routeHandler("/contacts")}>
-                            <Typography variant="h6">
-                                Контакты
-                            </Typography>
-                        </Button>
                         <CartIcon
                             firstCategory={firstCategory}
                             cartPriceCount={cartPriceCount}

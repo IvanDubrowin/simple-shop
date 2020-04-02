@@ -3,7 +3,7 @@ from typing import Optional
 
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import IntegerField, CharField
+from rest_framework.fields import DecimalField, CharField
 from rest_framework.serializers import (HiddenField, ModelSerializer,
                                         SerializerMethodField)
 from templated_email import send_templated_mail
@@ -65,7 +65,7 @@ class CurrentCart:
 class CartItemEditSerializer(ModelSerializer):
     cart = HiddenField(default=CurrentCart())
     title = CharField(read_only=True)
-    price = IntegerField(read_only=True)
+    price = DecimalField(max_digits=10, decimal_places=2, read_only=True)
     image = CharField(read_only=True)
 
     def create(self, validated_data: dict) -> CartItem:
@@ -97,15 +97,15 @@ class CartItemDetailSerializer(ModelSerializer):
 
     @staticmethod
     def get_title(cart_item: CartItem) -> str:
-        return cart_item.title
+        return cart_item.product.title
 
     @staticmethod
     def get_price(cart_item: CartItem) -> str:
-        return cart_item.price
+        return '%.2f' % cart_item.product.price
 
     def get_image(self, cart_item: CartItem) -> Optional[str]:
-        if cart_item.image:
-            url = os.path.join(settings.MEDIA_URL, cart_item.image)
+        if cart_item.product.image:
+            url = os.path.join(settings.MEDIA_URL, cart_item.product.image.name)
             return self.context['request'].build_absolute_uri(url)
 
     class Meta:

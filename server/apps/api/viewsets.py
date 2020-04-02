@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models.query import QuerySet
 from django.http import Http404
 from rest_framework import status
@@ -86,11 +86,7 @@ class CartItemViewSet(
         return super().retrieve(request, *args, **kwargs)
 
     def annotate_queryset(self) -> None:
-        self.queryset = self.queryset.annotate(
-            title=F('product__title'),
-            price=F('product__price'),
-            image=F('product__image')
-        )
+        self.queryset = self.queryset.select_related('product')
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()

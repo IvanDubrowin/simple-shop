@@ -22,13 +22,16 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', cu
 const useStyles = makeStyles(theme => ({
     product: {
         margin: '10px',
-        boxShadow: '0 0 5px',
+        boxShadow: '0 0 0px',
     },
     image: {
         paddingTop: '100%'
     },
     actionButton: {
-        margin: '5px'
+        margin: '5px',
+        '&:disabled': {
+            color: theme.palette.secondary.main
+        }
     },
     pagination: {
         padding: '25px'
@@ -124,7 +127,7 @@ const Product = ({
                         <Button
                             className={classes.actionButton}
                             onClick={() => addCartItem(productId, 1)}
-                            color={inCart ? "secondary" : "primary"}
+                            disabled={inCart ? true : false}
                             variant="outlined"
                         >
                             <Typography>

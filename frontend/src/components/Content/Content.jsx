@@ -24,10 +24,9 @@ const Content = ({ text, orderCreated, clearCart }) => {
     const [open, setOpen] = React.useState(false)
 
     const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return
+        if (!(reason === 'clickaway')) {
+            setOpen(false)
         }
-        setOpen(false)
     }
 
     if (orderCreated && !(open)) {
