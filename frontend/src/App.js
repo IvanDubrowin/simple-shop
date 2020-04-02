@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Header from "./components/Header/Header";
@@ -12,6 +12,7 @@ import { getUiConfig } from "./redux/reducers/config-reducer";
 import { getCategories } from "./redux/reducers/categories-reducer";
 import { getCartData } from "./redux/reducers/cart-reducer";
 import Preloader from "./components/Preloader/Preloader";
+import NotFound from "./components/Errors/NotFound";
 
 const theme = createMuiTheme({
     palette: {
@@ -46,17 +47,7 @@ const App = ({
         getCartData()
         return <ThemeProvider theme={theme}><Preloader /></ThemeProvider>
     }
-    const ShopComponents = ({ firstCategory }) => {
-        if (firstCategory) {
-            return (
-                <React.Fragment>
-                    <Route path='/shop/categories/:id' component={Shop} />
-                    <Route path='/cart' component={Cart} />
-                </React.Fragment>
-            )
-        }
-        return null
-    }
+    
     return (
         <React.Fragment>
             <ThemeProvider theme={theme}>
@@ -64,7 +55,9 @@ const App = ({
                 <div className={classes.mainWrapper}>
                     <Switch>
                         <Route exact path='/' component={Content} />
-                        <ShopComponents firstCategory={firstCategory} />
+                        <Route path='/shop/categories/:id' component={Shop} />
+                        <Route path='/cart' component={Cart} />
+                        <Route path='*' component={NotFound} />
                     </Switch>
                 </div>
                 <Footer />

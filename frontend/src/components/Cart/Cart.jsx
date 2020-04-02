@@ -18,7 +18,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import CartItem from "./CartItem";
 import { createOrder } from "../../services/api/shop";
 import { setOrderCreated } from "../../redux/reducers/cart-reducer";

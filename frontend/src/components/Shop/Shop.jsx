@@ -2,13 +2,19 @@ import React from "react";
 import { connect } from "react-redux";
 import Grid from '@material-ui/core/Grid';
 import ProductsList from "./Products";
+import NotFound from "../Errors/NotFound";
 import CategoriesList from "./Categories";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
 
-
-const Shop = ({ match, fetchProducts }) => {
+const Shop = ({ match, fetchProducts, categoriesData }) => {
 
     const categoryId = match.params.id
+
+    const categoryIdList = categoriesData.map(item => item.get('id'))
+
+    if(!(categoryIdList.includes(+categoryId))) {
+        return <NotFound/>
+    }
 
     fetchProducts(categoryId, 1)
 
@@ -28,4 +34,10 @@ const Shop = ({ match, fetchProducts }) => {
     )
 };
 
-export default connect(null, { fetchProducts })(Shop);
+const mapStateToProps = state => {
+    return ({
+        categoriesData: state.get('categories').get('data')
+    })
+}
+
+export default connect(mapStateToProps, { fetchProducts })(Shop);

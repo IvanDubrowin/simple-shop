@@ -32,7 +32,7 @@ const Footer = ({
     const classes = useStyles();
 
     const VkButton = () => {
-        if (vk != "") {
+        if (vk !== "") {
             return (
             <IconButton 
                 color="inherit"
@@ -46,7 +46,7 @@ const Footer = ({
     }
 
     const InstagramButton = () => {
-        if (instagram != "") {
+        if (instagram !== "") {
             return (
             <IconButton 
                 color="inherit"
