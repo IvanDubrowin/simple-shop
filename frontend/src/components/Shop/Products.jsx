@@ -1,21 +1,21 @@
-import React from "react";
-import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import { Tooltip } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import Collapse from '@material-ui/core/Collapse';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Pagination from '@material-ui/lab/Pagination';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
-import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
-import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
-import { fetchProducts } from "../../redux/reducers/products-reducer";
-import { addCartItem } from "../../redux/reducers/cart-reducer";
+import React from "react"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import { Tooltip } from "@material-ui/core"
+import Grid from "@material-ui/core/Grid"
+import Card from "@material-ui/core/Card"
+import Collapse from "@material-ui/core/Collapse"
+import CardMedia from "@material-ui/core/CardMedia"
+import CardContent from "@material-ui/core/CardContent"
+import CardActions from "@material-ui/core/CardActions"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import Pagination from "@material-ui/lab/Pagination"
+import StarBorderOutlinedIcon from "@material-ui/icons/StarBorderOutlined"
+import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined"
+import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop"
+import { fetchProducts } from "../../redux/reducers/products-reducer"
+import { addCartItem } from "../../redux/reducers/cart-reducer"
 
 const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
 
@@ -39,19 +39,20 @@ const useStyles = makeStyles(theme => ({
     pagination: {
         padding: '25px'
     },
-    iconWidget: {
+    icon: {
         padding: '5px',
         fontSize: '30px'
     }
-}));
+}))
 
-const ProductWidgets = ({ isRecommend, isTop }) => {
+const ProductIcons = ({ isRecommend, isTop }) => {
+
     const classes = useStyles()
 
     const IsRecommend = () => {
         if(isRecommend) {
             return (
-                <Tooltip className={classes.iconWidget} title="Рекомендовано">
+                <Tooltip className={classes.icon} title="Рекомендовано">
                     <ThumbUpAltOutlinedIcon/>
                 </Tooltip>
             )
@@ -62,7 +63,7 @@ const ProductWidgets = ({ isRecommend, isTop }) => {
     const IsTop = () => {
         if(isTop) {
             return (
-                <Tooltip className={classes.iconWidget} title="Топ">
+                <Tooltip className={classes.icon} title="Топ">
                     <StarBorderOutlinedIcon/>
                 </Tooltip>
             )
@@ -89,19 +90,23 @@ const Product = ({
     addCartItem,
     cartItems
 }) => {
-    const classes = useStyles();
-    const defaultImage = DEFAULT_IMAGE
-    const [expanded, setExpanded] = React.useState(false);
+
+    const classes = useStyles()
+    
+    const [expanded, setExpanded] = React.useState(false)
+
     const inCart = cartItems.get(productId) ? true : false
+
     const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+        setExpanded(!expanded)
+    }
+
     return (
         <Grid item lg={3} md={6} sm={12} xs={12}>
             <Card className={classes.product}>
                 <CardMedia
                     className={classes.image}
-                    image={!(image) ? defaultImage : image}
+                    image={!(image) ? DEFAULT_IMAGE : image}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -111,7 +116,7 @@ const Product = ({
                         <h2>{currencyFormatter.format(price)}</h2>
                     </Typography>
                     <Typography>
-                        <ProductWidgets isRecommend={isRecommend} isTop={isTop}/>
+                        <ProductIcons isRecommend={isRecommend} isTop={isTop}/>
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -162,14 +167,18 @@ const ProductsList = ({
     currentPage,
     cartItems
 }) => {
-    const classes = useStyles();
-    const pagesCount = Math.ceil(productCount / PRODUCTS_PER_PAGE);
+
+    const classes = useStyles()
+
+    const pagesCount = Math.ceil(productCount / PRODUCTS_PER_PAGE)
+
     const pageChange = (event, value) => {
         if (!(value === currentPage)) {
             fetchProducts(categoryId, value)
         }
-    };
-    let products = results.map(
+    }
+
+    const products = results.map(
         product => (
             <Product
                 productId={product.get('id')}
@@ -212,7 +221,7 @@ const ProductsList = ({
             </Grid>
         </React.Fragment>
     )
-};
+}
 
 const mapStateToProps = state => {
     return ({
@@ -223,4 +232,4 @@ const mapStateToProps = state => {
     })
 }
 
-export default connect(mapStateToProps, { fetchProducts, addCartItem })(ProductsList);
+export default connect(mapStateToProps, { fetchProducts, addCartItem })(ProductsList)

@@ -1,5 +1,5 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react"
+import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(theme => ({
     notFoundWrapper: {
@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const NotFound = () => {
+    
     const classes = useStyles()
 
     return (

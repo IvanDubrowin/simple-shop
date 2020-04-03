@@ -1,18 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
-import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Content from "./components/Content/Content";
-import Shop from "./components/Shop/Shop";
-import Cart from "./components/Cart/Cart";
-import { getUiConfig } from "./redux/reducers/config-reducer";
-import { getCategories } from "./redux/reducers/categories-reducer";
-import { getCartData } from "./redux/reducers/cart-reducer";
-import Preloader from "./components/Preloader/Preloader";
-import NotFound from "./components/Errors/NotFound";
+import React from "react"
+import { connect } from "react-redux"
+import { Switch, Route } from "react-router-dom"
+import { createMuiTheme, ThemeProvider, makeStyles } from "@material-ui/core/styles"
+import grey from "@material-ui/core/colors/grey"
+import Header from "./components/Header/Header"
+import Footer from "./components/Footer/Footer"
+import Content from "./components/Content/Content"
+import Shop from "./components/Shop/Shop"
+import Cart from "./components/Cart/Cart"
+import { getUiConfig } from "./redux/reducers/config-reducer"
+import { getCategories } from "./redux/reducers/categories-reducer"
+import { getCartData } from "./redux/reducers/cart-reducer"
+import Preloader from "./components/Preloader/Preloader"
+import NotFound from "./components/Errors/NotFound"
 
 const theme = createMuiTheme({
     palette: {
@@ -24,7 +24,7 @@ const theme = createMuiTheme({
         fontFamily: "'Cabin', sans-serif",
         letterSpacing: '3px'
     }
-});
+})
 
 const useStyles = makeStyles(theme => ({
     mainWrapper: {
@@ -34,16 +34,11 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         marginTop: '80px'
     }
-}));
+}))
 
-const App = ({
-    initialized,
-    firstCategory,
-    getUiConfig,
-    getCategories,
-    getCartData
-}) => {
-    const classes = useStyles();
+const App = ({ initialized, getUiConfig, getCategories, getCartData }) => {
+
+    const classes = useStyles()
 
     if (!initialized) {
         getUiConfig()
@@ -68,13 +63,12 @@ const App = ({
             </ThemeProvider>
         </React.Fragment>
     )
-};
+}
 
 const mapStateToProps = state => {
     return ({
-        initialized: state.get('config').get('initialized'),
-        firstCategory: state.get('categories').get('firstCategory')
+        initialized: state.get('config').get('initialized')
     })
 }
 
-export default connect(mapStateToProps, { getUiConfig, getCategories, getCartData })(App);
+export default connect(mapStateToProps, { getUiConfig, getCategories, getCartData })(App)

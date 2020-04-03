@@ -1,7 +1,7 @@
-import { Map, fromJS } from 'immutable';
-import loadUiConfig from "../../services/api/uiConfig";
+import { Map, fromJS } from "immutable"
+import { loadUiConfig } from "../../services/api/uiConfig"
 
-const SET_CONFIG = 'SET_CONFIG';
+const SET_CONFIG = 'SET_CONFIG'
 
 let initialState = Map({
     initialized: false,
@@ -9,27 +9,27 @@ let initialState = Map({
     carousel: null,
     contact_info: null,
     content: null
-});
+})
 
-export const setUiConfig = (title, carousel, contact_info, content) => ({
+const setUiConfigAction = (title, carousel, contact_info, content) => ({
     type: SET_CONFIG,
     payload: { title, carousel, contact_info, content }
-});
+})
 
 export const getUiConfig = () => async dispatch => {
     let configData = await loadUiConfig();
     let { title, carousel, contact_info, content } = configData;
-    dispatch(setUiConfig(title, carousel, contact_info, content));
+    dispatch(setUiConfigAction(title, carousel, contact_info, content));
 }
 
 const uiConfigReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_CONFIG:
             return state.merge(fromJS({ ...action.payload, initialized: true}))
+
         default:
             return state
     }
-};
+}
 
-
-export default uiConfigReducer;
+export default uiConfigReducer

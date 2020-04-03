@@ -24,7 +24,6 @@ export const addToCart = async (productId, count) => {
 
 export const deleteProductInCart = async id => await API.delete(`${CART_ENDPOINT}${id}/`)
 
-
 export const createOrder = async(name, phoneNumber, email) => {
     const url = `${CART_ENDPOINT}${CREATE_ORDER}`
     const res = await API.post(url, { name, phone_number: phoneNumber, email })

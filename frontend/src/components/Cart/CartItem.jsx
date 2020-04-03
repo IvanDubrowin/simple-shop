@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
-import { deleteCartItem, addCartItem } from "../../redux/reducers/cart-reducer";
-import { DEFAULT_IMAGE } from "../../constants/shop";
+import React from "react"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import { IconButton, Typography } from "@material-ui/core"
+import Button from "@material-ui/core/Button"
+import ButtonGroup from "@material-ui/core/ButtonGroup"
+import TableCell from "@material-ui/core/TableCell"
+import TableRow from "@material-ui/core/TableRow"
+import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined"
+import { deleteCartItem, addCartItem } from "../../redux/reducers/cart-reducer"
+import { DEFAULT_IMAGE } from "../../constants/shop"
 
 const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
 
@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
+
     const classes = useStyles()
 
     const handleIncrement = () => {
@@ -52,6 +53,7 @@ const CartItemCounter = ({ count, productId, addCartItem, deleteCartItem }) => {
 }
 
 const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
+
     const classes = useStyles()
 
     const image = (!item.image) ? DEFAULT_IMAGE : item.image
@@ -85,4 +87,4 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
     )
 }
 
-export default connect(null, { addCartItem, deleteCartItem })(CartItem);
+export default connect(null, { addCartItem, deleteCartItem })(CartItem)

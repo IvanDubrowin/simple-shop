@@ -1,18 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import Carousel from 'react-responsive-carousel/lib/components/Carousel';
-import { makeStyles } from "@material-ui/core/styles";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import React from "react"
+import { connect } from "react-redux"
+import Carousel from "react-responsive-carousel/lib/components/Carousel"
+import { makeStyles } from "@material-ui/core/styles"
+import "react-responsive-carousel/lib/styles/carousel.min.css"
 
 const useStyles = makeStyles(theme => ({
     imageContainer: {
         height: '100%'
     }
-}));
+}))
 
 const ContentCarousel = ({ firstImage, secondImage }) => {
 
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <Carousel
@@ -39,4 +39,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(ContentCarousel);
+export default connect(mapStateToProps)(ContentCarousel)

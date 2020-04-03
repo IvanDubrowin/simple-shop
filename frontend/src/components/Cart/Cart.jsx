@@ -1,26 +1,26 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { Map, fromJS } from 'immutable';
-import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import MaskedInput from 'react-text-mask';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Button from "@material-ui/core/Button";
-import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableFooter from '@material-ui/core/TableFooter';
-import TextField from '@material-ui/core/TextField';
-import CartItem from "./CartItem";
-import { createOrder } from "../../services/api/shop";
-import { setOrderCreated } from "../../redux/reducers/cart-reducer";
+import React from "react"
+import { useHistory } from "react-router-dom"
+import { Map, fromJS } from "immutable"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import { Typography } from "@material-ui/core"
+import MaskedInput from "react-text-mask"
+import Modal from "@material-ui/core/Modal"
+import Backdrop from "@material-ui/core/Backdrop"
+import Fade from "@material-ui/core/Fade"
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import Table from "@material-ui/core/Table"
+import TableBody from "@material-ui/core/TableBody"
+import TableCell from "@material-ui/core/TableCell"
+import TableContainer from "@material-ui/core/TableContainer"
+import TableHead from "@material-ui/core/TableHead"
+import TableRow from "@material-ui/core/TableRow"
+import TableFooter from "@material-ui/core/TableFooter"
+import TextField from "@material-ui/core/TextField"
+import CartItem from "./CartItem"
+import { createOrder } from "../../services/api/shop"
+import { setOrderCreated } from "../../redux/reducers/cart-reducer"
 
 const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
 
@@ -51,11 +51,11 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+const Cart = ({ items, totalPrice, setOrderCreated }) => {
 
-const Cart = ({ items, priceCount, setOrderCreated }) => {
     const history = useHistory()
 
-    if (priceCount === 0) {
+    if (totalPrice === 0) {
         history.push('/')
     }
 
@@ -67,8 +67,8 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
 
     const handleCloseOrderForm = () => setOpen(false)
 
-    const OrderButton = ({ priceCount }) => {
-        if (priceCount > 0) {
+    const OrderButton = ({ totalPrice }) => {
+        if (totalPrice > 0) {
             return (
                 <Button
                     variant="outlined"
@@ -84,13 +84,14 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
     }
 
     const PhoneMask = (props) => {
+
         const { inputRef, ...other } = props
       
         return (
           <MaskedInput
             {...other}
             ref={(ref) => {
-              inputRef(ref ? ref.inputElement : null);
+              inputRef(ref ? ref.inputElement : null)
             }}
             mask={
                 ['+', /[1-9]/, '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]
@@ -102,6 +103,7 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
       }
 
     const OrderForm = () => {
+
         const [name, setName] = React.useState('')
 
         const [phoneNumber, setPhoneNumber] = React.useState('+7(999)999-99-99')
@@ -218,11 +220,11 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
                                 </TableCell>
                                 <TableCell>
                                     <Typography>
-                                        {currencyFormatter.format(priceCount)}
+                                        {currencyFormatter.format(totalPrice)}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="right" colSpan={3}>
-                                    <OrderButton priceCount={priceCount} />
+                                    <OrderButton totalPrice={totalPrice} />
                                     <OrderForm />
                                 </TableCell>
                             </TableFooter>
@@ -237,8 +239,8 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
 const mapStateToProps = state => {
     return {
         items: state.get('cart').get('items'),
-        priceCount: state.get('cart').get('priceCount')
+        totalPrice: state.get('cart').get('totalPrice')
     }
 }
 
-export default connect(mapStateToProps, { setOrderCreated })(Cart);
+export default connect(mapStateToProps, { setOrderCreated })(Cart)

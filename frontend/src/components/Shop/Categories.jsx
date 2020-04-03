@@ -2,7 +2,7 @@ import React from "react"
 import { useHistory } from "react-router-dom"
 import { connect } from "react-redux"
 import { makeStyles } from "@material-ui/core/styles"
-import Fab from '@material-ui/core/Fab'
+import Fab from "@material-ui/core/Fab"
 
 const useStyles = makeStyles(theme => ({
     categoryItem: {
@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const CategoryItem = ({ id, title, currentCategory }) => {
+    
     const isCurrent = +currentCategory === +id
 
     const classes = useStyles()
@@ -31,8 +32,8 @@ const CategoryItem = ({ id, title, currentCategory }) => {
         )
 }
 
-const CategoriesList = ({ currentCategory, data }) => {
-    let categories = data.map(
+const CategoriesList = ({ currentCategory, items }) => {
+    const categories = items.map(
         category => (
             <CategoryItem 
                 id={category.get('id')} 
@@ -46,7 +47,7 @@ const CategoriesList = ({ currentCategory, data }) => {
 
 const mapStateToProps = state => {
     return ({
-        data: state.get('categories').get('data')
+        items: state.get('categories').get('items')
     })
 }
 

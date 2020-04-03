@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import grey from '@material-ui/core/colors/grey';
-import PhoneIcon from '@vkontakte/icons/dist/28/phone_outline';
-import VkIcon from '@vkontakte/icons/dist/28/logo_vk_outline';
-import EMailIcon from '@vkontakte/icons/dist/28/mail_outline';
-import InstagramIcon from '@vkontakte/icons/dist/28/logo_instagram';
+import React from "react"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import IconButton from "@material-ui/core/IconButton"
+import Grid from "@material-ui/core/Grid"
+import Typography from "@material-ui/core/Typography"
+import grey from "@material-ui/core/colors/grey"
+import PhoneIcon from "@vkontakte/icons/dist/28/phone_outline"
+import VkIcon from "@vkontakte/icons/dist/28/logo_vk_outline"
+import EMailIcon from "@vkontakte/icons/dist/28/mail_outline"
+import InstagramIcon from "@vkontakte/icons/dist/28/logo_instagram"
 
 const useStyles = makeStyles(theme => ({
     stickToBottom: {
@@ -23,13 +23,9 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Footer = ({
-    phoneNumber,
-    email,
-    instagram,
-    vk
-}) => {
-    const classes = useStyles();
+const Footer = ({ phoneNumber, email, instagram, vk }) => {
+
+    const classes = useStyles()
 
     const VkButton = () => {
         if (vk !== "") {

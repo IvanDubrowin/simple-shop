@@ -1,18 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import Grid from '@material-ui/core/Grid';
-import ProductsList from "./Products";
-import NotFound from "../Errors/NotFound";
-import CategoriesList from "./Categories";
-import { fetchProducts } from "../../redux/reducers/products-reducer";
+import React from "react"
+import { connect } from "react-redux"
+import Grid from "@material-ui/core/Grid"
+import ProductsList from "./Products"
+import NotFound from "../Errors/NotFound"
+import CategoriesList from "./Categories"
+import { fetchProducts } from "../../redux/reducers/products-reducer"
 
-const Shop = ({ match, fetchProducts, categoriesData }) => {
+const Shop = ({ match, fetchProducts, categories }) => {
 
     const categoryId = match.params.id
 
-    const categoryIdList = categoriesData.map(item => item.get('id'))
+    const categoriesIdList = categories.map(item => item.get('id'))
 
-    if(!(categoryIdList.includes(+categoryId))) {
+    if(!(categoriesIdList.includes(+categoryId))) {
         return <NotFound/>
     }
 
@@ -32,12 +32,12 @@ const Shop = ({ match, fetchProducts, categoriesData }) => {
             </Grid>
         </Grid>
     )
-};
+}
 
 const mapStateToProps = state => {
     return ({
-        categoriesData: state.get('categories').get('data')
+        categories: state.get('categories').get('items')
     })
 }
 
-export default connect(mapStateToProps, { fetchProducts })(Shop);
+export default connect(mapStateToProps, { fetchProducts })(Shop)

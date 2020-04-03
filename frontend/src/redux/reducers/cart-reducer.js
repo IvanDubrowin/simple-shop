@@ -1,5 +1,5 @@
-import { Map, fromJS } from 'immutable';
-import { addToCart, deleteProductInCart, loadCart } from '../../services/api/shop';
+import { Map, fromJS } from "immutable"
+import { addToCart, deleteProductInCart, loadCart } from "../../services/api/shop"
 
 const LOAD_CART = 'LOAD_CART'
 
@@ -12,14 +12,14 @@ const CLEAR_CART = 'CLEAR_CART'
 const CREATE_ORDER = 'CREATE_ORDER'
 
 let initialState = Map({
-    priceCount: 0,
+    totalPrice: 0,
     items: Map(),
     orderCreated: false
 })
 
-const setCartDataAction = (priceCount, items) => ({
+const setCartDataAction = (totalPrice, items) => ({
     type: LOAD_CART,
-    payload: { priceCount, items }
+    payload: { totalPrice, items }
 })
 
 const addToCartAction = item => ({
@@ -40,10 +40,10 @@ const createOrderAction = () => ({
     type: CREATE_ORDER
 })
 
-const getPriceCount = cartData => {
+const getTotalPrice = cartData => {
     return cartData.reduce(
         (total, item) => parseFloat(total + (item.count * item.price)),
-        initialState.get('priceCount')
+        initialState.get('totalPrice')
     )
 }
 
@@ -65,8 +65,8 @@ const listToMap = cartData => {
 export const getCartData = () => async dispatch => {
     const cartData = await loadCart()
     const items = listToMap(cartData)
-    const priceCount = getPriceCount(items)
-    dispatch(setCartDataAction(priceCount, items))
+    const totalPrice = getTotalPrice(items)
+    dispatch(setCartDataAction(totalPrice, items))
 }
 
 export const addCartItem = (productId, count) => async dispatch => {
@@ -87,6 +87,7 @@ const cartReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_CART:
             return state.merge(fromJS({ ...action.payload }))
+
         case ADD_TO_CART:
             const item = action.payload
             state = state.setIn(
@@ -98,19 +99,21 @@ const cartReducer = (state = initialState, action) => {
                     count: item.count
                 }
             )
-            return state.setIn(['priceCount'], getPriceCount(state.get('items')))
+            return state.setIn(['totalPrice'], getTotalPrice(state.get('items')))
+
         case DELETE_ITEM:
             state = state.deleteIn(['items', action.payload])
-            return state.setIn(['priceCount'], getPriceCount(state.get('items')))
+            return state.setIn(['totalPrice'], getTotalPrice(state.get('items')))
+
         case CLEAR_CART:
             return initialState
+
         case CREATE_ORDER:
             return state.set('orderCreated', true)
+            
         default:
             return state
     }
 }
 
-export default cartReducer;
-
-
+export default cartReducer

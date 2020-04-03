@@ -1,11 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
-import { makeStyles } from '@material-ui/core/styles';
-import ContentCarousel from "../Carousel/Carousel";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { clearCart } from "../../redux/reducers/cart-reducer";
-
+import React from "react"
+import { connect } from "react-redux"
+import { makeStyles } from "@material-ui/core/styles"
+import ContentCarousel from "../Carousel/Carousel"
+import Snackbar from "@material-ui/core/Snackbar"
+import MuiAlert from "@material-ui/lab/Alert"
+import { clearCart } from "../../redux/reducers/cart-reducer"
 
 const useStyles = makeStyles(theme => ({
     contentWrapper: {
@@ -16,9 +15,10 @@ const useStyles = makeStyles(theme => ({
     successOrder: {
         width: '100%'
     }
-}));
+}))
 
 const Content = ({ text, orderCreated, clearCart }) => {
+
     const classes = useStyles()
 
     const [open, setOpen] = React.useState(false)
@@ -63,7 +63,7 @@ const Content = ({ text, orderCreated, clearCart }) => {
             </Snackbar>
         </React.Fragment>
     )
-};
+}
 
 const mapStateToProps = state => {
     return ({
@@ -72,4 +72,4 @@ const mapStateToProps = state => {
     })
 }
 
-export default connect(mapStateToProps, { clearCart })(Content);
+export default connect(mapStateToProps, { clearCart })(Content)
