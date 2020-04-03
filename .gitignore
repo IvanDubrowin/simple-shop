@@ -138,3 +138,5 @@ dmypy.json
 /server/apps/shop/migrations/
 /server/apps/ui/migrations/
 /server/email/
+/server/static/
+/server/apps/ui/static/

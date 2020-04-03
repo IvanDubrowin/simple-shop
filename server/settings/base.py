@@ -92,6 +92,10 @@ class Base(Configuration):
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+    STATICFILES_DIRS = [
+        os.path.join(STATIC_ROOT, 'apps/ui')
+    ]
+
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
     TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'

@@ -47,26 +47,11 @@ const getTotalPrice = cartData => {
     )
 }
 
-const listToMap = cartData => {
-    return cartData.reduce(
-        (map, item) => {
-            map[item.product] = {
-                id: item.id,
-                title: item.title,
-                price: parseFloat(item.price),
-                image: item.image,
-                count: item.count
-            }
-            return map
-        }, Map()
-    )
-}
+const addMany = (dispatch, cartData) => cartData.map(item => dispatch(addToCartAction(item)))
 
 export const getCartData = () => async dispatch => {
     const cartData = await loadCart()
-    const items = listToMap(cartData)
-    const totalPrice = getTotalPrice(items)
-    dispatch(setCartDataAction(totalPrice, items))
+    addMany(dispatch, cartData)
 }
 
 export const addCartItem = (productId, count) => async dispatch => {
