@@ -1,7 +1,5 @@
-import { Map, fromJS } from "immutable"
+import { Map } from "immutable"
 import { addToCart, deleteProductInCart, loadCart } from "../../services/api/shop"
-
-const LOAD_CART = 'LOAD_CART'
 
 const ADD_TO_CART = 'ADD_TO_CART'
 
@@ -15,11 +13,6 @@ let initialState = Map({
     totalPrice: 0,
     items: Map(),
     orderCreated: false
-})
-
-const setCartDataAction = (totalPrice, items) => ({
-    type: LOAD_CART,
-    payload: { totalPrice, items }
 })
 
 const addToCartAction = item => ({
@@ -70,9 +63,6 @@ export const setOrderCreated = () => async dispatch => dispatch(createOrderActio
 
 const cartReducer = (state = initialState, action) => {    
     switch (action.type) {
-        case LOAD_CART:
-            return state.merge(fromJS({ ...action.payload }))
-
         case ADD_TO_CART:
             const item = action.payload
             state = state.setIn(
