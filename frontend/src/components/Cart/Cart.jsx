@@ -195,7 +195,7 @@ const Cart = ({ items, priceCount, setOrderCreated }) => {
                 direction="row"
                 justify="center"
             >
-                <Grid item xs={12} sm={8}>
+                <Grid item xl={8} md={12} zeroMinWidth>
                     <TableContainer>
                         <Table>
                             <TableHead>

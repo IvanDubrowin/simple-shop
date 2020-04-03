@@ -6,25 +6,27 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const useStyles = makeStyles(theme => ({
     imageContainer: {
-        height: 600
+        height: '100%'
     }
 }));
 
+const ContentCarousel = ({ firstImage, secondImage }) => {
 
-const ContentCarousel = ({ first_image, second_image }) => {
     const classes = useStyles();
 
     return (
         <Carousel
             autoPlay={true}
+            infiniteLoop={true}
             showThumbs={false}
             showStatus={false}
+            interval={7000}
         >
             <div className={classes.imageContainer}>
-                <img src={first_image} />
+                <img src={firstImage} alt=""/>
             </div>
             <div className={classes.imageContainer}>
-                <img src={second_image} />
+                <img src={secondImage} alt =""/>
             </div>
         </Carousel>
     )
@@ -32,8 +34,8 @@ const ContentCarousel = ({ first_image, second_image }) => {
 
 const mapStateToProps = state => {
     return {
-        first_image: state.get('config').get('carousel').get('first_image'),
-        second_image: state.get('config').get('carousel').get('second_image'),
+        firstImage: state.get('config').get('carousel').get('first_image'),
+        secondImage: state.get('config').get('carousel').get('second_image'),
     }
 }
 

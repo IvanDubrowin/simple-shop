@@ -16,7 +16,7 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', cu
 
 const useStyles = makeStyles(theme => ({
     headerWrapper: {
-        padding: '3px'
+        paddingRight: '10px'
     },
     toolBar: {
         display: 'flex',

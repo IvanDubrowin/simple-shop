@@ -11,8 +11,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
-import StarSharpIcon from '@material-ui/icons/StarSharp';
-import ThumbUpAltSharpIcon from '@material-ui/icons/ThumbUpAltSharp';
+import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import { DEFAULT_IMAGE, PRODUCTS_PER_PAGE } from "../../constants/shop";
 import { fetchProducts } from "../../redux/reducers/products-reducer";
 import { addCartItem } from "../../redux/reducers/cart-reducer";
@@ -22,16 +22,19 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', cu
 const useStyles = makeStyles(theme => ({
     product: {
         margin: '10px',
-        boxShadow: '0 0 0px',
+        boxShadow: '0 0 0px'
     },
     image: {
         paddingTop: '100%'
     },
-    actionButton: {
+    addCartButton: {
         margin: '5px',
         '&:disabled': {
             color: theme.palette.secondary.main
         }
+    },
+    descriptionButton: {
+        margin: '5px'
     },
     pagination: {
         padding: '25px'
@@ -42,14 +45,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ProductWidgets = ({ is_recommend, is_top }) => {
+const ProductWidgets = ({ isRecommend, isTop }) => {
     const classes = useStyles()
 
     const IsRecommend = () => {
-        if(is_recommend) {
+        if(isRecommend) {
             return (
                 <Tooltip className={classes.iconWidget} title="Рекомендовано">
-                    <ThumbUpAltSharpIcon/>
+                    <ThumbUpAltOutlinedIcon/>
                 </Tooltip>
             )
         }
@@ -57,10 +60,10 @@ const ProductWidgets = ({ is_recommend, is_top }) => {
     }
 
     const IsTop = () => {
-        if(is_top) {
+        if(isTop) {
             return (
                 <Tooltip className={classes.iconWidget} title="Топ">
-                    <StarSharpIcon/>
+                    <StarBorderOutlinedIcon/>
                 </Tooltip>
             )
         }
@@ -78,8 +81,8 @@ const ProductWidgets = ({ is_recommend, is_top }) => {
 const Product = ({
     productId,
     title,
-    is_recommend,
-    is_top,
+    isRecommend,
+    isTop,
     price,
     description,
     image,
@@ -94,7 +97,7 @@ const Product = ({
         setExpanded(!expanded);
     };
     return (
-        <Grid item xs={12} sm={3}>
+        <Grid item lg={3} md={6} sm={12} xs={12}>
             <Card className={classes.product}>
                 <CardMedia
                     className={classes.image}
@@ -104,19 +107,20 @@ const Product = ({
                     <Typography gutterBottom variant="h5" component="h2">
                         {title}
                     </Typography>
-                    <Typography color="textSecondary" component="p">
+                    <Typography component="p">
                         <h2>{currencyFormatter.format(price)}</h2>
                     </Typography>
                     <Typography>
-                        <ProductWidgets is_recommend={is_recommend} is_top={is_top}/>
+                        <ProductWidgets isRecommend={isRecommend} isTop={isTop}/>
                     </Typography>
                 </CardContent>
                 <CardActions>
                     <Grid container justify="flex-end">
                         <Button
-                            className={classes.actionButton}
+                            className={classes.descriptionButton}
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
+                            disabled={description === "" ? true : false}
                             variant="outlined"
                             color="primary"
                         >
@@ -125,10 +129,11 @@ const Product = ({
                         </Typography>
                         </Button>
                         <Button
-                            className={classes.actionButton}
+                            className={classes.addCartButton}
                             onClick={() => addCartItem(productId, 1)}
                             disabled={inCart ? true : false}
                             variant="outlined"
+                            color="primary"
                         >
                             <Typography>
                                 {inCart ? "В корзине" : "В корзину"}
@@ -169,8 +174,8 @@ const ProductsList = ({
             <Product
                 productId={product.get('id')}
                 title={product.get('title')}
-                is_recommend={product.get('is_recommend')}
-                is_top={product.get('is_top')}
+                isRecommend={product.get('is_recommend')}
+                isTop={product.get('is_top')}
                 price={product.get('price')}
                 description={product.get('description')}
                 image={product.get('image')}

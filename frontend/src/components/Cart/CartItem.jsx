@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import { deleteCartItem, addCartItem } from "../../redux/reducers/cart-reducer";
 import { DEFAULT_IMAGE } from "../../constants/shop";
 
@@ -59,7 +59,7 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
     return (
         <TableRow key={productId}>
             <TableCell>
-                <img src={image} className={classes.image} />
+                <img src={image} alt="" className={classes.image} />
             </TableCell>
             <TableCell>
                 <Typography>
@@ -78,7 +78,7 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
             <TableCell>{currencyFormatter.format(item.price * item.count)}</TableCell>
             <TableCell>
                 <IconButton onClick={() => deleteCartItem(productId)}>
-                    <DeleteSharpIcon />
+                    <DeleteForeverOutlinedIcon fontSize="large" color="primary"/>
                 </IconButton>
             </TableCell>
         </TableRow>

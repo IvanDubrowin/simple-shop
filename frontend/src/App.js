@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Header from "./components/Header/Header";
@@ -19,6 +19,10 @@ const theme = createMuiTheme({
         primary: {
             main: grey[900]
         }
+    },
+    typography: {
+        fontFamily: "'Cabin', sans-serif",
+        letterSpacing: '3px'
     }
 });
 
