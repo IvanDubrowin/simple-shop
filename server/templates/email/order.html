@@ -1,23 +1,54 @@
-{% block subject %}Заказ {{ order.pk }}{% endblock %}
+{% load humanize %}
+{% block subject %}Заказ № {{ order.pk }}{% endblock %}
 {% block html %}
-  <table>
-    <tr>
-        <th>Название товара</th>
-        <th>Цена</th>
-        <th>Количество</th>
-        <th>Общая сумма</th>
-    </tr>
-      {% for product in products %}
-    <tr>
-        <td>{{ product.title }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.count }}</td>
-        <td>{{ product.total_price }}</td>
-     </tr>
-      {% endfor %}
-  </table>
-  <h2>Общая сумма к оплате: {{ total }}</h2>
-  <h3>Ваши контактные данные:</h3>
-  <p>Email: {{ order.email }}</p>
-  <p>Телефон: {{ order.phone_number }}</p>
+<html>
+  <head>
+      <style type="text/css">
+         .head-item {
+            padding: 15px;
+            text-align: left;
+            white-space: nowrap;
+         }
+
+        .body-item {
+            padding: 15px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .body-item-title {
+            padding: 15px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .total-price {
+            padding: 15px;
+        }
+    </style>
+  </head>
+  <body>
+        <table>
+            <tr>
+                <th class="head-item">Название товара</th>
+                <th class="head-item">Цена</th>
+                <th class="head-item">Количество</th>
+                <th class="head-item">Общая сумма</th>
+            </tr>
+              {% for product in products %}
+            <tr>
+                <td class="body-item-title">{{ product.title }}</td>
+                <td class="body-item">{{ product.price | intcomma }} ₽</td>
+                <td class="body-item">{{ product.count }}</td>
+                <td class="body-item">{{ product.total_price | intcomma }} ₽</td>
+             </tr>
+              {% endfor %}
+        </table>
+        <h2 class="total-price">Общая сумма: {{ total | intcomma }} ₽</h2>
+        <h4>Спасибо за заказ {{ order.name }}, скоро с вами свяжется отдел продаж.</h4>
+        <h4>Ваши контактные данные:</h4>
+        <p>Email: {{ order.email }}</p>
+        <p>Телефон: {{ order.phone_number }}</p>
+  </body>
+</html>
 {% endblock %}

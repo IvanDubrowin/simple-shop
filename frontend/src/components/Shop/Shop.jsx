@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import Grid from "@material-ui/core/Grid"
 import ProductsList from "./Products"
-import NotFound from "../Errors/NotFound"
+import Error from "../Errors/Error"
 import CategoriesList from "./Categories"
 import { fetchProducts } from "../../redux/reducers/products-reducer"
 
@@ -12,18 +12,16 @@ const Shop = ({ match, fetchProducts, categories }) => {
 
     const categoriesIdList = categories.map(item => item.get('id'))
 
-    if(!(categoriesIdList.includes(+categoryId))) {
-        return <NotFound/>
+    const notExistCategory = !(categoriesIdList.includes(+categoryId))
+
+    if (notExistCategory) {
+        return <Error text="Упс! Страница не найдена" code={404}/>
     }
 
     fetchProducts(categoryId, 1)
 
     return (
-        <Grid 
-            container
-            justify="center"
-            alignItems="center"
-            >
+        <Grid container justify="center">
             <Grid item xl={12}>
                 <CategoriesList currentCategory={categoryId}/>
             </Grid>

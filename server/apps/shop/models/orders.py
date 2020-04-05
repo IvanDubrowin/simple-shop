@@ -59,10 +59,10 @@ class Order(models.Model):
         result = self.items.aggregate(
             total=models.Sum(
                 models.F('price') * models.F('count'),
-                output_field=models.DecimalField(max_digits=2)
+                output_field=models.DecimalField()
             )
         )
-        return result.get('total') or Decimal(0.00)
+        return Decimal(round(result.get('total'), 2)) or Decimal(0.00)
 
     class Meta:
         db_table = 'orders'

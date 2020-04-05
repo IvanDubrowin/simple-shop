@@ -50,7 +50,7 @@ const ProductIcons = ({ isRecommend, isTop }) => {
     const classes = useStyles()
 
     const IsRecommend = () => {
-        if(isRecommend) {
+        if (isRecommend) {
             return (
                 <Tooltip className={classes.icon} title="Рекомендовано">
                     <ThumbUpAltOutlinedIcon/>
@@ -61,7 +61,7 @@ const ProductIcons = ({ isRecommend, isTop }) => {
     }
 
     const IsTop = () => {
-        if(isTop) {
+        if (isTop) {
             return (
                 <Tooltip className={classes.icon} title="Топ">
                     <StarBorderOutlinedIcon/>
@@ -178,6 +178,22 @@ const ProductsList = ({
         }
     }
 
+    const ProductsPagination = () => {
+        if (pagesCount > 1) {
+            return (
+                <Pagination
+                    className={classes.pagination}
+                    count={pagesCount}
+                    page={currentPage}
+                    onChange={pageChange}
+                    color="primary"
+                    size="large"
+                />
+            )
+        }
+        return null
+    }
+
     const products = results.map(
         product => (
             <Product
@@ -210,14 +226,7 @@ const ProductsList = ({
                 justify="center"
                 alignItems="center"
             >
-                <Pagination
-                    className={classes.pagination}
-                    count={pagesCount}
-                    page={currentPage}
-                    onChange={pageChange}
-                    color="primary"
-                    size="large"
-                />
+                <ProductsPagination/>
             </Grid>
         </React.Fragment>
     )

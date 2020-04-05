@@ -12,7 +12,7 @@ import { getUiConfig } from "./redux/reducers/config-reducer"
 import { getCategories } from "./redux/reducers/categories-reducer"
 import { getCartData } from "./redux/reducers/cart-reducer"
 import Preloader from "./components/Preloader/Preloader"
-import NotFound from "./components/Errors/NotFound"
+import Error from "./components/Errors/Error"
 
 const theme = createMuiTheme({
     palette: {
@@ -41,9 +41,9 @@ const App = ({ initialized, getUiConfig, getCategories, getCartData }) => {
     const classes = useStyles()
 
     if (!initialized) {
-        getUiConfig()
         getCategories()
         getCartData()
+        getUiConfig()
         return <ThemeProvider theme={theme}><Preloader /></ThemeProvider>
     }
     
@@ -56,7 +56,12 @@ const App = ({ initialized, getUiConfig, getCategories, getCartData }) => {
                         <Route exact path='/' component={Content} />
                         <Route path='/shop/categories/:id' component={Shop} />
                         <Route path='/cart' component={Cart} />
-                        <Route path='*' component={NotFound} />
+                        <Route path='/error' 
+                               render={() => <Error text="Упс! Что-то пошло не так" code={500} />} 
+                        />
+                        <Route path='*' 
+                               render={() => <Error text="Упс! Страница не найдена" code={404} />}
+                        />
                     </Switch>
                 </div>
                 <Footer />

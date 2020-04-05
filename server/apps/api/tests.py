@@ -137,13 +137,11 @@ class CartTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        cart_item_pk = response.data['id']
-
-        response = self.client.patch(
-            '/api/cart/{id}/'.format(id=cart_item_pk),
-            data={'count': 20}
+        response = self.client.post(
+            '/api/cart/',
+            data={'count': 20, 'product': self.product.pk}
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         session_id = self.client.session.session_key
         cart = Cart.objects.get(session_id=session_id)
@@ -185,4 +183,4 @@ class CartTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/cart/')
-        self.assertEqual(response.data['results'], [])
+        self.assertEqual(response.data, [])

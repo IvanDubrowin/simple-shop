@@ -119,11 +119,17 @@ const Cart = ({ items, totalPrice, setOrderCreated }) => {
         const handleSubmit = event => {
             createOrder(name, phoneNumber.replace(/[^+\d]/g, ''), email)
                 .then(() => {
-                        setOrderCreated()
-                        history.push('/')
+                    setOrderCreated()
+                    history.push('/')
+                }
+            )
+                .catch(error => {
+                    if(error.response.status !== 400) {
+                        history.push('/error')
                     }
-                )
-                .catch(error => setErrors(fromJS(error.response.data)))
+                    setErrors(fromJS(error.response.data))
+                }
+            )
         }
 
         return (

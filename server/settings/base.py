@@ -14,6 +14,7 @@ class Base(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'django.contrib.humanize',
         'django_cleanup',
         'corsheaders',
         'djrichtextfield',
@@ -93,7 +94,8 @@ class Base(Configuration):
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
     STATICFILES_DIRS = [
-        os.path.join(STATIC_ROOT, 'apps/ui')
+        os.path.join(BASE_DIR, 'apps/ui/static'),
+        os.path.join(BASE_DIR, 'apps/shop/static')
     ]
 
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

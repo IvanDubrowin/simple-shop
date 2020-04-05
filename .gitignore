@@ -139,4 +139,5 @@ dmypy.json
 /server/apps/ui/migrations/
 /server/email/
 /server/static/
-/server/apps/ui/static/
+/.env
+/postgres-data/

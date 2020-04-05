@@ -1,4 +1,8 @@
-export const DEFAULT_IMAGE = 'https://img.mvideo.ru/Pdb/30045359b.jpg'
+const DEV_DEFAULT_IMAGE = 'http://localhost:8000/static/img/default.png'
+
+const PROD_DEFAULT_IMAGE = `${window.location.origin}/static/img/default.png`
+
+export const DEFAULT_IMAGE = process.env.NODE_ENV === "development" ? DEV_DEFAULT_IMAGE : PROD_DEFAULT_IMAGE
 
 export const PRODUCTS_PER_PAGE = 16
 

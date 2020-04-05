@@ -2,7 +2,7 @@ import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(theme => ({
-    notFoundWrapper: {
+    ErrorWrapper: {
         position: 'absolute',
         left: '50%',
         top: '50%',
@@ -14,11 +14,11 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: '220px',
         paddingLeft: '10px'
     },
-    notFound: {
+    Error: {
         position: 'relative',
         height: '240px',
     },
-    notFoundH1: {
+    ErrorH1: {
         fontFamily: "'Montserrat', sans-serif",
         position: 'absolute',
         left: '50%',
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
             textShadow: '-8px 0px 0px #fff'
         }
     },
-    notFoundH3: {
+    ErrorH3: {
         fontFamily: "'Cabin', sans-serif",
         position: 'relative',
         fontSize: '16px',
@@ -48,24 +48,24 @@ const useStyles = makeStyles(theme => ({
 
 }))
 
-const NotFound = () => {
+const Error = ({ text, code }) => {
+
+    const prettyCode = (""+code).split("").map(char => <span>{char}</span>)
     
     const classes = useStyles()
 
     return (
-        <div className={classes.notFoundWrapper}>
-            <div className={classes.NotFound}>
-                <h3 className={classes.notFoundH3}>
-                    Упс! Страница не найдена
+        <div className={classes.ErrorWrapper}>
+            <div className={classes.Error}>
+                <h3 className={classes.ErrorH3}>
+                    {text}
                 </h3>
-                <h1 className={classes.notFoundH1}>
-                    <span>4</span>
-                    <span>0</span>
-                    <span>4</span>
+                <h1 className={classes.ErrorH1}>
+                    {prettyCode}
                 </h1>
             </div>
         </div>
     )
 }
 
-export default NotFound
+export default Error

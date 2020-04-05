@@ -16,13 +16,18 @@ const useStyles = makeStyles(theme => ({
     counter: {
         '&:disabled': {
             color: theme.palette.grey[900]
-        }
+        },
+        minWidth:50
     },
     image: {
         flex: 1,
         width: 50,
         height: 50,
         resizeMode: 'contain'
+    },
+    priceCell: {
+        minWidth:100, 
+        maxWidth:100
     }
 }))
 
@@ -68,7 +73,9 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
                     {item.title}
                 </Typography>
             </TableCell>
-            <TableCell>{currencyFormatter.format(item.price)}</TableCell>
+            <TableCell className={classes.priceCell}>
+                    {currencyFormatter.format(item.price)}
+            </TableCell>
             <TableCell>
                 <CartItemCounter
                     count={item.count}
@@ -77,7 +84,9 @@ const CartItem = ({ item, productId, addCartItem, deleteCartItem }) => {
                     deleteCartItem={deleteCartItem}
                 />
             </TableCell>
-            <TableCell>{currencyFormatter.format(item.price * item.count)}</TableCell>
+            <TableCell className={classes.priceCell}>
+                {currencyFormatter.format(item.price * item.count)}
+            </TableCell>
             <TableCell>
                 <IconButton onClick={() => deleteCartItem(productId)}>
                     <DeleteForeverOutlinedIcon fontSize="large" color="primary"/>

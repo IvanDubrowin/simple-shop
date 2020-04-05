@@ -25,6 +25,10 @@ django-templated-email = "*"
 django-simple-captcha = "*"
 django-richtextfield = "*"
 django-cors-headers = "*"
+dj-database-url = "*"
+python-memcached = "*"
+django-cache-url = "*"
+pylibmc = "*"
 
 [requires]
 python_version = "3.7"

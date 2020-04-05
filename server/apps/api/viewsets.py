@@ -1,11 +1,11 @@
-from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models.query import QuerySet
 from django.http import Http404
-from rest_framework import status
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
-                                   RetrieveModelMixin, DestroyModelMixin)
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   ListModelMixin, RetrieveModelMixin)
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -27,6 +27,7 @@ class UiConfigViewSet(GenericViewSet):
     queryset = UiConfig.objects.select_related('carousel', 'contact_info', 'content')
     serializer_class = UiConfigSerializer
 
+    @method_decorator(cache_page(60 * 60 * 8))
     @action(methods=['GET'], detail=False)
     def active(self, request: Request) -> Response:
         config = UiConfig.get_active_config()
@@ -44,6 +45,14 @@ class CategoryViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = CategorySerializer
     filter_backends = (IsPublishedFilter,)
 
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        return super().list(request, *args, **kwargs)
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+        return super().retrieve(request, *args, **kwargs)
+
 
 class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     """
@@ -53,6 +62,14 @@ class RelatedProductViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     serializer_class = ProductSerializer
     filter_backends = (IsPublishedFilter,)
     pagination_class = ProductPagination
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        return super().list(request, *args, **kwargs)
+
+    @method_decorator(cache_page(60 * 60 * 2))
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+        return super().retrieve(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
@@ -106,8 +123,4 @@ class CartItemViewSet(
         serializer_class=OrderCreateSerializer
     )
     def create_order(self, request: Request) -> Response:
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return super().create(request)

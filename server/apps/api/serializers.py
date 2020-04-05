@@ -3,7 +3,7 @@ from typing import Optional
 
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import DecimalField, CharField
+from rest_framework.fields import CharField, DecimalField
 from rest_framework.serializers import (HiddenField, ModelSerializer,
                                         SerializerMethodField)
 from templated_email import send_templated_mail
@@ -84,6 +84,7 @@ class CartItemEditSerializer(ModelSerializer):
         if product.image:
             url = os.path.join(settings.MEDIA_URL, product.image.name)
             return self.context['request'].build_absolute_uri(url)
+        return None
 
     class Meta:
         model = CartItem
@@ -107,6 +108,7 @@ class CartItemDetailSerializer(ModelSerializer):
         if cart_item.product.image:
             url = os.path.join(settings.MEDIA_URL, cart_item.product.image.name)
             return self.context['request'].build_absolute_uri(url)
+        return None
 
     class Meta:
         model = CartItem

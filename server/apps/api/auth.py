@@ -1,5 +1,5 @@
-from rest_framework.request import Request
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.request import Request
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
