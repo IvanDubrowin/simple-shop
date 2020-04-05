@@ -15,17 +15,21 @@ const Shop = ({ match, fetchProducts, categories }) => {
     const notExistCategory = !(categoriesIdList.includes(+categoryId))
 
     if (notExistCategory) {
-        return <Error text="Упс! Страница не найдена" code={404}/>
+        return <Error text="Упс! Страница не найдена" code={404} />
     }
 
     fetchProducts(categoryId, 1)
 
     return (
-        <Grid container justify="center">
-            <Grid item xl={12}>
-                <CategoriesList currentCategory={categoryId}/>
+        <Grid 
+            container 
+            direction="column" 
+            alignItems="flex-start"
+        >
+            <Grid container direction="row" justify="flex-start">
+                <CategoriesList currentCategory={categoryId} />
             </Grid>
-            <Grid item xl={10}>
+            <Grid container direction="row" justify="center">
                 <ProductsList categoryId={categoryId} />
             </Grid>
         </Grid>

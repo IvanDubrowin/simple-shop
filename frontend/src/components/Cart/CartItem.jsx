@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
         '&:disabled': {
             color: theme.palette.grey[900]
         },
-        minWidth:50
+        minWidth: 50
     },
     image: {
         flex: 1,
@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
         resizeMode: 'contain'
     },
     priceCell: {
-        minWidth:100, 
-        maxWidth:100
+        minWidth: 100, 
+        maxWidth: 100
     }
 }))
 

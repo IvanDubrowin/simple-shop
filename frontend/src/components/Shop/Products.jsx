@@ -21,7 +21,7 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', { style: 'currency', cu
 
 const useStyles = makeStyles(theme => ({
     product: {
-        margin: '10px',
+        margin: '35px',
         boxShadow: '0 0 0px'
     },
     image: {
@@ -31,10 +31,12 @@ const useStyles = makeStyles(theme => ({
         margin: '5px',
         '&:disabled': {
             color: theme.palette.secondary.main
-        }
+        },
+        width: 'max-content'
     },
     descriptionButton: {
-        margin: '5px'
+        margin: '5px',
+        width: 'max-content'
     },
     pagination: {
         padding: '25px'
@@ -53,7 +55,7 @@ const ProductIcons = ({ isRecommend, isTop }) => {
         if (isRecommend) {
             return (
                 <Tooltip className={classes.icon} title="Рекомендовано">
-                    <ThumbUpAltOutlinedIcon/>
+                    <ThumbUpAltOutlinedIcon />
                 </Tooltip>
             )
         }
@@ -64,7 +66,7 @@ const ProductIcons = ({ isRecommend, isTop }) => {
         if (isTop) {
             return (
                 <Tooltip className={classes.icon} title="Топ">
-                    <StarBorderOutlinedIcon/>
+                    <StarBorderOutlinedIcon />
                 </Tooltip>
             )
         }
@@ -73,8 +75,8 @@ const ProductIcons = ({ isRecommend, isTop }) => {
 
     return (
         <Typography>
-            <IsRecommend/>
-            <IsTop/>
+            <IsRecommend />
+            <IsTop />
         </Typography>
     )
 }
@@ -92,7 +94,7 @@ const Product = ({
 }) => {
 
     const classes = useStyles()
-    
+
     const [expanded, setExpanded] = React.useState(false)
 
     const inCart = cartItems.get(productId) ? true : false
@@ -102,7 +104,7 @@ const Product = ({
     }
 
     return (
-        <Grid item lg={3} md={6} sm={12} xs={12}>
+        <Grid item lg={3} md={6} sm={10} xs={10}>
             <Card className={classes.product}>
                 <CardMedia
                     className={classes.image}
@@ -116,11 +118,15 @@ const Product = ({
                         <h2>{currencyFormatter.format(price)}</h2>
                     </Typography>
                     <Typography>
-                        <ProductIcons isRecommend={isRecommend} isTop={isTop}/>
+                        <ProductIcons isRecommend={isRecommend} isTop={isTop} />
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <Grid container justify="flex-end">
+                <Grid 
+                    container 
+                    direction="row" 
+                    justify="flex-end"
+                >
+                    <CardActions>
                         <Button
                             className={classes.descriptionButton}
                             onClick={handleExpandClick}
@@ -144,8 +150,8 @@ const Product = ({
                                 {inCart ? "В корзине" : "В корзину"}
                             </Typography>
                         </Button>
-                    </Grid>
-                </CardActions>
+                    </CardActions>
+                </Grid>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <Typography paragraph>
@@ -154,7 +160,7 @@ const Product = ({
                     </CardContent>
                 </Collapse>
             </Card>
-        </Grid>
+        </Grid >
     )
 }
 
@@ -212,21 +218,13 @@ const ProductsList = ({
 
     return (
         <React.Fragment>
+            {products}
             <Grid
                 container
                 direction="row"
                 justify="center"
-                alignItems="center"
             >
-                {products}
-            </Grid>
-            <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-            >
-                <ProductsPagination/>
+                <ProductsPagination />
             </Grid>
         </React.Fragment>
     )
