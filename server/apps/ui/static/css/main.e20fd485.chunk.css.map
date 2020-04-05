@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,KACI,YAAa,CACb,qBAAsB,CACtB,QACF","file":"main.e20fd485.chunk.css","sourcesContent":["body {\n    display: flex;\n    flex-direction: column;\n    margin: 0px;\n  }"]}
